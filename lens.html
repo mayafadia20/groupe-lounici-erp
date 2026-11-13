@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lens | Groupe Lounici</title>
+<meta name="robots" content="noindex">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="icon" href="favicon.ico?v=3" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png?v=3">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+html{scroll-behavior:auto}
+body{margin:0;background:#e8e8eb}
+a{color:#111113}a:hover{color:#3a3a3f}
+.screen{display:none}
+.screen:target{display:block}
+body:not(:has(.screen:target)) #connexion{display:block}
+/* retour au portail client de Groupe Lounici (ajout au-dessus de la maquette) */
+#retour-portail{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;background:#fff;color:#111113;text-decoration:none;font-family:'Space Grotesk','Helvetica Neue',sans-serif;font-size:13.5px;font-weight:600;box-shadow:0 18px 40px -16px rgba(0,0,0,.35)}
+#retour-portail:hover{background:#e4e4e8;color:#111113}
+@media (max-width: 900px){#retour-portail{display:none}}
+</style>
+<style>[data-proc-del]:hover{background:#c62828 !important;color:#ffffff !important}.diag-row:hover{background:#e9e9ec !important}.diag-row:active{background:#dcdce0 !important}</style>
+<style>#epc.epc-editing [data-edit] { outline: 1.5px dashed #8a8a92; outline-offset: 3px; cursor: pointer; } #epc:not(.epc-editing) [data-edit] { cursor: default; } #epc:not(.epc-editing) [data-edit^="step:"] { cursor: pointer; }</style>
+</head>
+<body>
+<script src="lens-config.js?v=1"></script>
+<script src="lens-cloud.js?v=1"></script>
+<script>
+  // Accès réservé : session de la base en ligne (compte Lens) ou, en mode local, passage par la fenêtre de connexion du portail
+  // En ligne, Lens a son propre écran d'accueil (se connecter / créer un compte) ; en mode local, la barrière du portail reste.
+  (function () { var ok = false; try { ok = (window.LensCloud && LensCloud.enabled) ? true : sessionStorage.getItem("portail") === "1"; } catch (e) {} if (!ok) { location.replace("index.html#portail"); } })();
+</script>
+<a id="retour-portail" href="portail.html" title="Retour au portail">← Portail</a>
+<section class="screen" id="connexion" data-index="0">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif; display: flex">
+<div style="flex: 1; max-width: 1392px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: center">
+
+  <section aria-label="Accès à Lens" style="flex: 0 1 620px; margin: 0 auto; align-self: center; min-width: 0; box-sizing: border-box; border-radius: 32px; padding: 44px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; gap: 26px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+
+    <!-- accueil : se connecter ou créer un compte -->
+    <div data-cv="accueil" style="display: flex; flex-direction: column; gap: 26px">
+      <div style="display: flex; align-items: center; gap: 12px"><img src="assets/logo-blanc.png" alt="Lens" style="width: 48px; height: 48px; object-fit: contain; filter: invert(1)"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px; max-width: 460px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">BIENVENUE</span>
+        <h2 style="margin: 0; font-size: 32px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Lens, le diagnostic opérationnel de votre entreprise</h2>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5e5e65">Enregistrez une tâche, Lens cartographie le processus et mesure où le temps se perd.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 460px">
+        <button type="button" id="cx-login" style="min-height: 56px; border-radius: 18px; border: none; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; width: 100%">Se connecter</button>
+        <button type="button" id="cx-signup" style="min-height: 52px; border-radius: 18px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; width: 100%">Créer un compte</button>
+        <button type="button" id="cx-switch" style="background: none; border: none; padding: 0; font: inherit; font-size: 13.5px; color: #5e5e65; text-decoration: underline; cursor: pointer; display: none; align-self: center">Changer de compte</button>
+        <span style="font-size: 12.5px; color: #5e5e65; text-align: center">Données hébergées au Canada · conforme à la Loi 25</span>
+      </div>
+    </div>
+
+    <!-- connexion -->
+    <form data-cv="login" novalidate style="display: none; flex-direction: column; gap: 26px">
+      <div style="display: flex; align-items: center; gap: 12px"><img src="assets/logo-blanc.png" alt="Lens" style="width: 48px; height: 48px; object-fit: contain; filter: invert(1)"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px; max-width: 460px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">CONNEXION</span>
+        <h2 style="margin: 0; font-size: 32px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Accédez à votre espace</h2>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5e5e65">Avec le courriel et le mot de passe de votre compte Lens.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 460px">
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Courriel<input id="lg-email" type="email" autocomplete="username" placeholder="vous@entreprise.ca" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"></label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Mot de passe<input id="lg-pass" type="password" autocomplete="current-password" placeholder="Votre mot de passe" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"></label>
+        <div id="lg-err" style="display: none; font-size: 13.5px; line-height: 1.45; color: #c62828; padding: 10px 14px; border-radius: 12px; background: #fdecea"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 460px">
+        <button type="submit" id="lg-go" style="min-height: 56px; border-radius: 18px; border: none; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; width: 100%">Se connecter</button>
+        <div style="display: flex; justify-content: space-between; gap: 12px"><button type="button" id="lg-back" style="background: none; border: none; padding: 0; font: inherit; font-size: 13.5px; color: #5e5e65; text-decoration: underline; cursor: pointer">← Retour</button><button type="button" id="lg-reset" style="background: none; border: none; padding: 0; font: inherit; font-size: 13.5px; color: #5e5e65; text-decoration: underline; cursor: pointer">Mot de passe oublié ?</button></div>
+        <span style="font-size: 12.5px; color: #5e5e65; text-align: center">Données hébergées au Canada · conforme à la Loi 25</span>
+      </div>
+    </form>
+
+    <!-- créer un compte : l'espace de l'entreprise -->
+    <form data-cv="creer" novalidate style="display: none; flex-direction: column; gap: 26px">
+      <div style="display: flex; align-items: center; gap: 12px"><img src="assets/logo-blanc.png" alt="Lens" style="width: 48px; height: 48px; object-fit: contain; filter: invert(1)"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px; max-width: 460px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">BIENVENUE</span>
+        <h2 style="margin: 0; font-size: 32px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Créez l'espace de votre entreprise</h2>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5e5e65">Quelques informations pour adapter Lens à votre secteur. Vous pourrez tout modifier plus tard.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 460px">
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Nom de l'entreprise<input id="co-name" placeholder="Ex. : Construction Boréal inc." style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"></label>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Secteur<select id="co-sector" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"><option>Construction</option><option>Architecture</option><option>Gestion immobilière</option><option>Manufacturier</option><option>Services professionnels</option><option>Commerce</option><option>Autre</option></select></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Taille<select id="co-size" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"><option>1 à 9 employés</option><option>10 à 49 employés</option><option selected>50 à 99 employés</option><option>100 à 249 employés</option><option>250 employés et plus</option></select></label>
+        </div>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Courriel professionnel<input id="co-email" type="email" autocomplete="username" placeholder="vous@entreprise.ca" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"></label>
+        <div data-cloud-only style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Mot de passe<input id="co-pass" type="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Confirmer<input id="co-pass2" type="password" autocomplete="new-password" minlength="8" placeholder="Le même mot de passe" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; width: 100%"></label>
+        </div>
+        <div id="co-err" style="display: none; font-size: 13.5px; line-height: 1.45; color: #c62828; padding: 10px 14px; border-radius: 12px; background: #fdecea"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 460px">
+        <button type="submit" id="btn-create" style="min-height: 56px; border-radius: 18px; border: none; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; width: 100%">Créer l'espace et commencer <span aria-hidden="true">→</span></button>
+        <button type="button" id="co-back" style="background: none; border: none; padding: 0; font: inherit; font-size: 13.5px; color: #5e5e65; text-decoration: underline; cursor: pointer; align-self: flex-start">← Retour</button>
+        <span style="font-size: 12.5px; color: #5e5e65; text-align: center">Données hébergées au Canada · conforme à la Loi 25</span>
+      </div>
+    </form>
+
+  </section>
+
+</div>
+</div>
+</section>
+<section class="screen" id="departements" data-index="1">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 16px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 40px; height: 40px; object-fit: contain; filter: invert(1)">
+      <span class="co-sub" data-sub="Construction Boréal inc. · configuration de l'espace" style="font-size: 13px; color: #5e5e65">Construction Boréal inc. · configuration de l'espace</span>
+    </div>
+    <ol aria-label="Étapes de configuration" style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px">
+      <li aria-current="step" style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #111113; color: #ffffff; font-size: 13.5px; font-weight: 600"><b style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; color: #111113; display: flex; align-items: center; justify-content: center; font-size: 12.5px">1</b>Départements</li>
+      <li style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #f1f1f3; font-size: 13.5px; font-weight: 500"><b style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 12.5px">2</b>Utilisateurs</li>
+      <li style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #f1f1f3; font-size: 13.5px; font-weight: 500"><b style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 12.5px">3</b>Objectifs</li>
+    </ol>
+  </header>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <section aria-label="Créer les départements" style="flex: 3 1 560px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">ÉTAPE 1 SUR 3</span>
+        <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Créez vos départements</h1>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: #5e5e65; max-width: 620px">Indiquez chaque département, son responsable et le département dont il relève. Lens dessine l'organigramme au fur et à mesure.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button id="dep-template" type="button" style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer">Gabarit : Construction</button>
+        <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px solid #dcdce0; background: #ffffff; color: #111113; font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer" id="dep-import">Importer un organigramme (Excel, CSV)</button>
+      </div>
+
+      <div style="overflow-x: auto">
+        <div style="min-width: 600px; display: flex; flex-direction: column">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; padding: 0 0 8px; border-bottom: 1px solid #ececef; font-size: 12px; font-weight: 600; color: #5e5e65"><span>Département</span><span>Responsable</span><span>Relève de</span><span>Employés</span><span></span></div>
+<div id="dep-rows" style="display: flex; flex-direction: column">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Direction" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="M. Lounici" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #5e5e65; background: #ffffff; min-width: 0"><option>— (sommet)</option></select><input aria-label="Employés" value="4" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Opérations" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="S. Roy" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Direction</option></select><input aria-label="Employés" value="14" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Estimation" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="J. Tremblay" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Opérations</option></select><input aria-label="Employés" value="9" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Approvisionnement" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="A. Côté" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Opérations</option></select><input aria-label="Employés" value="6" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Finance" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="L. Gagnon" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Direction</option></select><input aria-label="Employés" value="5" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Ressources humaines" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="N. Bouchard" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Finance</option></select><input aria-label="Employés" value="3" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Technologies" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="K. Pelletier" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Finance</option></select><input aria-label="Employés" value="4" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) 90px 36px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #ececef"><input aria-label="Département" value="Ventes" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #111113; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 600; color: #111113; min-width: 0"><input aria-label="Responsable" value="É. Morin" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><select aria-label="Relève de" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; color: #111113; background: #ffffff; min-width: 0"><option>Direction</option></select><input aria-label="Employés" value="7" style="height: 42px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; color: #111113; min-width: 0"><button type="button" aria-label="Supprimer" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; cursor: pointer">×</button></div>
+</div>
+        </div>
+      </div>
+
+      <button type="button" style="min-height: 52px; border-radius: 16px; border: 1.5px dashed #6b6b72; background: #ffffff; color: #111113; font: inherit; font-size: 14.5px; font-weight: 500; cursor: pointer" id="dep-add">+ Ajouter un département</button>
+    </section>
+
+    <section aria-label="Aperçu de la structure" style="flex: 2 1 340px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Aperçu de la structure</h2><span id="dep-badge" style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #f1f1f3">8 départements · 52 employés</span></div>
+      <div id="dep-tree" style="display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 14px; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff"><b>Direction</b><span style="font-size: 12px; color: #d4d4d8">M. Lounici · 4</span></div>
+        <div style="margin-left: 18px; padding-left: 16px; border-left: 1.5px solid #111113; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; border-radius: 14px; border: 1.5px solid #111113"><b>Opérations</b><span style="font-size: 12px; color: #5e5e65">S. Roy · 14</span></div>
+          <div style="margin-left: 18px; padding-left: 16px; border-left: 1.5px solid #a9a9b0; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 14px; background: #f4f4f6"><span style="font-weight: 600">Estimation</span><span style="font-size: 12px; color: #5e5e65">J. Tremblay · 9</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 14px; background: #f4f4f6"><span style="font-weight: 600">Approvisionnement</span><span style="font-size: 12px; color: #5e5e65">A. Côté · 6</span></div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; border-radius: 14px; border: 1.5px solid #111113"><b>Finance</b><span style="font-size: 12px; color: #5e5e65">L. Gagnon · 5</span></div>
+          <div style="margin-left: 18px; padding-left: 16px; border-left: 1.5px solid #a9a9b0; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 14px; background: #f4f4f6"><span style="font-weight: 600">Ressources humaines</span><span style="font-size: 12px; color: #5e5e65">N. Bouchard · 3</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 14px; background: #f4f4f6"><span style="font-weight: 600">Technologies</span><span style="font-size: 12px; color: #5e5e65">K. Pelletier · 4</span></div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; border-radius: 14px; border: 1.5px solid #111113"><b>Ventes</b><span style="font-size: 12px; color: #5e5e65">É. Morin · 7</span></div>
+        </div>
+      </div>
+      <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #5e5e65">L'organigramme complet et la cartographie de l'entreprise se construisent sur le tableau de bord à partir de cette structure.</p>
+    </section>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+    <a href="#connexion" style="display: flex; align-items: center; min-height: 50px; padding: 0 22px; box-sizing: border-box; border-radius: 999px; border: 1.5px solid #111113; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500">Retour</a>
+    <a href="#utilisateurs" style="display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 26px; box-sizing: border-box; border-radius: 999px; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600">Continuer : inviter les utilisateurs<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+
+</div>
+</div>
+
+</section>
+<section class="screen" id="utilisateurs" data-index="2">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 16px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 40px; height: 40px; object-fit: contain; filter: invert(1)">
+      <span class="co-sub" data-sub="Construction Boréal inc. · configuration de l'espace" style="font-size: 13px; color: #5e5e65">Construction Boréal inc. · configuration de l'espace</span>
+    </div>
+    <ol aria-label="Étapes de configuration" style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px">
+      <li style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #f1f1f3; font-size: 13.5px; font-weight: 500"><b style="width: 28px; height: 28px; border-radius: 50%; background: #111113; color: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></b>Départements</li>
+      <li aria-current="step" style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #111113; color: #ffffff; font-size: 13.5px; font-weight: 600"><b style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; color: #111113; display: flex; align-items: center; justify-content: center; font-size: 12.5px">2</b>Utilisateurs</li>
+      <li style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #f1f1f3; font-size: 13.5px; font-weight: 500"><b style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 12.5px">3</b>Objectifs</li>
+    </ol>
+  </header>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <section aria-label="Inviter les utilisateurs" style="flex: 3 1 560px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">ÉTAPE 2 SUR 3</span>
+        <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Invitez vos employés dans leurs départements</h1>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: #5e5e65; max-width: 640px">Chaque personne invitée pourra participer aux diagnostics de son département. Les salaires restent visibles de la direction seulement.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button type="button" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer" id="inv-sync"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" fill="#ffffff"/><rect x="13" y="3" width="8" height="8" fill="#9a9aa1"/><rect x="3" y="13" width="8" height="8" fill="#9a9aa1"/><rect x="13" y="13" width="8" height="8" fill="#ffffff"/></svg>Synchroniser Microsoft Entra ID</button>
+        <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px solid #dcdce0; background: #ffffff; color: #111113; font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer" id="inv-import">Importer une liste (CSV)</button>
+      </div>
+
+      <div style="border-radius: 20px; padding: 16px; background: #f4f4f6; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr) auto; gap: 10px; align-items: end">
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600">Courriel<input id="inv-mail" type="email" placeholder="prenom.nom@entreprise.ca" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 400; color: #111113; min-width: 0"></label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600">Département<select id="inv-dept" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0"><option>Estimation</option><option>Opérations</option><option>Finance</option></select></label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600">Rôle<select id="inv-role" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 14px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0"><option>Contributeur</option><option>Gestionnaire</option><option>Administrateur</option><option>Lecteur</option></select></label>
+        <button type="button" style="min-height: 44px; padding: 0 20px; border-radius: 12px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer" id="inv-btn">Inviter</button>
+      </div>
+
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="color: #5e5e65; font-size: 12.5px; text-align: left"><th style="font-weight: 500; padding: 6px 8px 10px 0">Employé</th><th style="font-weight: 500; padding: 6px 8px 10px">Département</th><th style="font-weight: 500; padding: 6px 8px 10px">Rôle</th><th style="font-weight: 500; padding: 6px 0 10px 8px; text-align: right">Statut</th></tr></thead>
+          <tbody id="usr-body">
+            <tr style="border-top: 1px solid #ececef"><td style="padding: 11px 8px 11px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c4c4ca); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">JT</span><span style="display: flex; flex-direction: column"><b style="font-weight: 600">Julie Tremblay</b><span style="font-size: 12px; color: #5e5e65">j.tremblay@constructionboreal.ca</span></span></span></td><td style="padding: 11px 8px">Estimation</td><td style="padding: 11px 8px">Gestionnaire</td><td style="padding: 11px 0 11px 8px; text-align: right"><span style="font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: #111113; color: #ffffff; white-space: nowrap">Active</span></td></tr>
+            <tr style="border-top: 1px solid #ececef"><td style="padding: 11px 8px 11px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c4c4ca); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">SR</span><span style="display: flex; flex-direction: column"><b style="font-weight: 600">Simon Roy</b><span style="font-size: 12px; color: #5e5e65">s.roy@constructionboreal.ca</span></span></span></td><td style="padding: 11px 8px">Opérations</td><td style="padding: 11px 8px">Gestionnaire</td><td style="padding: 11px 0 11px 8px; text-align: right"><span style="font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: #111113; color: #ffffff; white-space: nowrap">Active</span></td></tr>
+            <tr style="border-top: 1px solid #ececef"><td style="padding: 11px 8px 11px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c4c4ca); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">AC</span><span style="display: flex; flex-direction: column"><b style="font-weight: 600">Alexandre Côté</b><span style="font-size: 12px; color: #5e5e65">a.cote@constructionboreal.ca</span></span></span></td><td style="padding: 11px 8px">Approvisionnement</td><td style="padding: 11px 8px">Gestionnaire</td><td style="padding: 11px 0 11px 8px; text-align: right"><span style="font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #111113; white-space: nowrap">Invitation envoyée</span></td></tr>
+            <tr style="border-top: 1px solid #ececef"><td style="padding: 11px 8px 11px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c4c4ca); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">LG</span><span style="display: flex; flex-direction: column"><b style="font-weight: 600">Louise Gagnon</b><span style="font-size: 12px; color: #5e5e65">l.gagnon@constructionboreal.ca</span></span></span></td><td style="padding: 11px 8px">Finance</td><td style="padding: 11px 8px">Administratrice</td><td style="padding: 11px 0 11px 8px; text-align: right"><span style="font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: #111113; color: #ffffff; white-space: nowrap">Active</span></td></tr>
+            <tr style="border-top: 1px solid #ececef"><td style="padding: 11px 8px 11px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c4c4ca); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">MB</span><span style="display: flex; flex-direction: column"><b style="font-weight: 600">Marc Bélanger</b><span style="font-size: 12px; color: #5e5e65">m.belanger@constructionboreal.ca</span></span></span></td><td style="padding: 11px 8px">Estimation</td><td style="padding: 11px 8px">Contributeur</td><td style="padding: 11px 0 11px 8px; text-align: right"><span style="font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #111113; white-space: nowrap">Invitation envoyée</span></td></tr>
+            <tr style="border-top: 1px solid #ececef"><td style="padding: 11px 8px 11px 0"><span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c4c4ca); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px">PL</span><span style="display: flex; flex-direction: column"><b style="font-weight: 600">Patricia Lavoie</b><span style="font-size: 12px; color: #5e5e65">p.lavoie@constructionboreal.ca</span></span></span></td><td style="padding: 11px 8px">Estimation</td><td style="padding: 11px 8px">Contributrice</td><td style="padding: 11px 0 11px 8px; text-align: right"><span style="font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; border: 1.5px dashed #6b6b72; color: #5e5e65; white-space: nowrap">À inviter</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-label="Résumé des invitations" style="flex: 2 1 320px; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+      <div style="border-radius: 28px; padding: 26px; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.55)">
+        <span style="font-size: 13px; color: #c9c9ce">Équipe invitée</span>
+        <div style="display: flex; align-items: baseline; gap: 10px"><b id="inv-count" style="font-size: 44px; line-height: 1">31</b><span style="font-size: 15px; color: #e4e4e8">sur <span id="inv-total">52</span> employés</span></div>
+        <span style="display: block; height: 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.2)"><span id="inv-bar" style="display: block; width: 60%; height: 8px; border-radius: 8px; background: #ffffff"></span></span>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; color: #d4d4d8"><span id="inv-active">18 comptes actifs</span><span id="inv-pending">13 en attente</span></div>
+      </div>
+      <div style="background: #ffffff; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Par département</h2>
+        <div id="inv-depts" style="display: flex; flex-direction: column; gap: 10px; font-size: 13.5px">
+          <div style="display: flex; flex-direction: column; gap: 5px"><span style="display: flex; justify-content: space-between"><span>Estimation</span><b>9 / 9</b></span><span style="display: block; height: 6px; border-radius: 6px; background: #e4e4e8"><span style="display: block; width: 100%; height: 6px; border-radius: 6px; background: #111113"></span></span></div>
+          <div style="display: flex; flex-direction: column; gap: 5px"><span style="display: flex; justify-content: space-between"><span>Opérations</span><b>10 / 14</b></span><span style="display: block; height: 6px; border-radius: 6px; background: #e4e4e8"><span style="display: block; width: 71%; height: 6px; border-radius: 6px; background: #111113"></span></span></div>
+          <div style="display: flex; flex-direction: column; gap: 5px"><span style="display: flex; justify-content: space-between"><span>Approvisionnement</span><b>4 / 6</b></span><span style="display: block; height: 6px; border-radius: 6px; background: #e4e4e8"><span style="display: block; width: 67%; height: 6px; border-radius: 6px; background: #111113"></span></span></div>
+          <div style="display: flex; flex-direction: column; gap: 5px"><span style="display: flex; justify-content: space-between"><span>Finance</span><b>5 / 5</b></span><span style="display: block; height: 6px; border-radius: 6px; background: #e4e4e8"><span style="display: block; width: 100%; height: 6px; border-radius: 6px; background: #111113"></span></span></div>
+          <div style="display: flex; flex-direction: column; gap: 5px"><span style="display: flex; justify-content: space-between"><span>Autres départements</span><b>3 / 18</b></span><span style="display: block; height: 6px; border-radius: 6px; background: #e4e4e8"><span style="display: block; width: 17%; height: 6px; border-radius: 6px; background: #111113"></span></span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+    <a href="#departements" style="display: flex; align-items: center; min-height: 50px; padding: 0 22px; box-sizing: border-box; border-radius: 999px; border: 1.5px solid #111113; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500">Retour</a>
+    <a href="#objectifs" style="display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 26px; box-sizing: border-box; border-radius: 999px; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600">Continuer : fixer les objectifs<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+
+</div>
+</div>
+
+</section>
+<section class="screen" id="objectifs" data-index="3">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 16px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 40px; height: 40px; object-fit: contain; filter: invert(1)">
+      <span class="co-sub" data-sub="Construction Boréal inc. · configuration de l'espace" style="font-size: 13px; color: #5e5e65">Construction Boréal inc. · configuration de l'espace</span>
+    </div>
+    <ol aria-label="Étapes de configuration" style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px">
+      <li style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #f1f1f3; font-size: 13.5px; font-weight: 500"><b style="width: 28px; height: 28px; border-radius: 50%; background: #111113; color: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></b>Départements</li>
+      <li style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #f1f1f3; font-size: 13.5px; font-weight: 500"><b style="width: 28px; height: 28px; border-radius: 50%; background: #111113; color: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></b>Utilisateurs</li>
+      <li aria-current="step" style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 6px; border-radius: 999px; background: #111113; color: #ffffff; font-size: 13.5px; font-weight: 600"><b style="width: 28px; height: 28px; border-radius: 50%; background: #ffffff; color: #111113; display: flex; align-items: center; justify-content: center; font-size: 12.5px">3</b>Objectifs</li>
+    </ol>
+  </header>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <section aria-label="Objectifs globaux" style="flex: 3 1 560px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px">
+        <div style="flex: 1 1 360px; min-width: 0; max-width: 640px; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">ÉTAPE 3 SUR 3</span>
+          <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Fixez vos objectifs globaux</h1>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: #5e5e65">Un objectif global se décline en indicateurs par département. Lens calcule l'écart entre la cible et le réel, puis relie chaque écart aux processus qui l'expliquent.</p>
+        </div>
+        <button type="button" id="obj-open" style="flex: none; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Ajouter un objectif</button>
+      </div>
+
+      <div id="obj-empty" style="border-radius: 22px; border: 1.5px dashed #b9b9bf; padding: 36px 24px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+        <b style="font-size: 16px">Aucun objectif pour l'instant</b>
+        <span style="font-size: 14px; line-height: 1.5; color: #5e5e65; max-width: 460px">Cliquez sur « Ajouter un objectif » pour définir sa catégorie, sa cible, les départements liés et leurs indicateurs. Chaque objectif enregistré apparaît à droite.</span>
+      </div>
+
+      <div id="obj-form" style="display: none; flex-direction: column; gap: 22px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 600">Catégorie</span>
+          <div id="obj-cats" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 13.5px; cursor: pointer">Financier</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">Opérationnel</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">Client</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">Qualité</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">Humain</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">Culturel</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">Technologique</button>
+          <button type="button" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13.5px; cursor: pointer">ESG</button>
+          </div>
+        </div>
+
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Objectif<input id="obj-title" placeholder="Ex. : Profitabilité sur les contrats de construction" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 400; color: #111113"></label>
+
+        <div style="display: grid; grid-template-columns: 80px minmax(0, 1fr) 90px minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: end">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Cible<select id="obj-op" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0; width: 100%; padding: 0 6px"><option>↔</option><option>=</option><option>≥</option><option>≤</option></select></label>
+          <div style="display: flex; align-items: center; gap: 6px"><input id="obj-min" aria-label="Cible minimum" placeholder="14" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0; width: 100%"><span id="obj-sep" style="font-size: 13px; color: #5e5e65">à</span><input id="obj-max" aria-label="Cible maximum" placeholder="16" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0; width: 100%"></div>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Unité<input id="obj-unit" placeholder="%" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0; width: 100%"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Par<input id="obj-per" placeholder="contrat" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0; width: 100%"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Horizon<select id="obj-horizon" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; background: #ffffff; min-width: 0; width: 100%; padding: 0 8px"><option>Par contrat</option><option>Journalier</option><option>Hebdomadaire</option><option>Bi-hebdomadaire</option><option>Mensuel</option><option>Trimestriel</option><option>Annuel</option></select></label>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 600">Départements liés à cet objectif</span>
+          <div id="obj-depts" style="display: flex; flex-wrap: wrap; gap: 8px"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 13px; font-weight: 600">Indicateurs par département</span>
+          <div id="ind-rows" style="display: flex; flex-direction: column; border-radius: 18px; border: 1px solid #e4e4e8; overflow: hidden"></div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px">
+          <button type="button" id="obj-save" style="min-height: 48px; padding: 0 22px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer">Enregistrer l'objectif</button>
+          <button type="button" id="obj-cancel" style="min-height: 48px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #dcdce0; background: #ffffff; color: #111113; font: inherit; font-size: 14.5px; font-weight: 500; cursor: pointer">Annuler</button>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Vos objectifs" style="flex: 2 1 320px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Vos objectifs globaux</h2><span id="obj-badge" style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #f1f1f3">0 objectif</span></div>
+      <div id="obj-list" style="display: flex; flex-direction: column; gap: 14px"></div>
+      <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #5e5e65">Les poids servent à prioriser les améliorations : un processus lié à un objectif lourd et en écart passe en tête de la feuille de route.</p>
+    </section>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+    <a href="#utilisateurs" style="display: flex; align-items: center; min-height: 50px; padding: 0 22px; box-sizing: border-box; border-radius: 999px; border: 1.5px solid #111113; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500">Retour</a>
+    <a href="#tableau" style="display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 26px; box-sizing: border-box; border-radius: 999px; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600">Terminer : ouvrir le tableau de bord<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+
+</div>
+</div>
+
+</section>
+<section class="screen" id="nouveau-diagnostic" data-index="4">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="border-radius: 28px; padding: 22px 24px; background: radial-gradient(120% 220% at 85% -40%, #55555a 0%, #1c1c1f 38%, #060607 100%); color: #ffffff; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.5)">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0">
+      <a href="#diagnostic" aria-label="Retour au diagnostic" style="width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); display: flex; align-items: center; justify-content: center; color: #ffffff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
+      <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+        <span id="pp-sub" style="font-size: 13px; color: #c9c9ce">Processus</span>
+        <h1 id="pp-title" style="margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">Processus</h1>
+      </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+      <span id="scr-live" style="display: none; align-items: center; gap: 10px; min-height: 46px; padding: 0 18px; border-radius: 999px; background: #ffffff; color: #111113; font-size: 15px; font-weight: 600"><i id="scr-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #c62828; box-shadow: 0 0 0 4px #f3c6c6"></i><span id="scr-timer">Enregistrement · 00:00</span></span>
+      <button type="button" id="scr-pause" style="display: none; min-height: 46px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255, 255, 255, 0.6); background: transparent; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Pause</button>
+      <button type="button" id="scr-finish" style="display: none; min-height: 46px; padding: 0 22px; border-radius: 999px; border: none; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Terminer</button>
+      <button type="button" id="scr-docs" style="display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: 999px; border: none; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 18v-6M9 15l3-3 3 3"/></svg>Importer des documents</button>
+      <input type="file" id="scr-docs-in" hidden multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.md,.txt,application/pdf">
+      <button type="button" id="scr-quiz" style="display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: 999px; border: none; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Questionnaire</button>
+      <button type="button" id="scr-start" style="display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 22px; border-radius: 999px; border: none; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer"><i style="width: 12px; height: 12px; border-radius: 50%; background: #c62828"></i>Enregistrer l'écran</button>
+    </div>
+  </header>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <aside id="proc-docs" aria-label="Documents du processus" style="flex: 1 1 260px; max-width: 360px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">DOCUMENTS</span>
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Documents du processus</h2>
+        <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #5e5e65">Gabarits, procédures, grilles de prix : ce que la personne utilise pendant la tâche. Lens s’en servira pour l’analyse. Au plus 10 par processus.</p>
+      </div>
+      <div id="scr-docs-list" style="display: flex; flex-direction: column; gap: 8px"></div>
+    </aside>
+
+    <aside id="quiz-panel" aria-label="Questionnaire" style="display: none; order: 3; flex: 2 1 360px; max-width: 460px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 22px; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18); position: sticky; top: 24px; max-height: calc(100vh - 48px)">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+        <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+          <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">QUESTIONNAIRE</span>
+          <h2 id="quiz-title" style="margin: 0; font-size: 18px; font-weight: 600">Entretien sur le processus</h2>
+          <select id="quiz-diag" style="display: none; margin-top: 4px; height: 34px; border-radius: 999px; border: 1.5px solid #dcdce0; background: #fff; font: inherit; font-size: 12.5px; font-weight: 600; padding: 0 10px"></select>
+        </div>
+        <button type="button" id="quiz-close" aria-label="Fermer le questionnaire" style="flex: none; width: 34px; height: 34px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; font-size: 18px; cursor: pointer">×</button>
+      </div>
+      <div id="quiz-msgs" style="display: flex; flex-direction: column; gap: 10px; overflow: auto; flex: 1 1 auto; min-height: 160px; padding-right: 4px"></div>
+      <form id="quiz-form" style="display: flex; flex-direction: column; gap: 8px">
+        <textarea id="quiz-input" rows="3" placeholder="Répondez, ou décrivez une correction à apporter au diagramme (étape manquante, durée, document…)" style="box-sizing: border-box; width: 100%; border-radius: 14px; border: 1.5px solid #dcdce0; padding: 10px 12px; font: inherit; font-size: 14px; resize: vertical"></textarea>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><span id="quiz-status" style="font-size: 12.5px; color: #5e5e65"></span><button type="submit" id="quiz-send" style="min-height: 40px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Envoyer</button></div>
+      </form>
+    </aside>
+
+    <div style="flex: 3 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+      <section id="scr-card" aria-label="Enregistrement de l'écran" style="min-height: 360px; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+        <p id="scr-hint" style="margin: 0; font-size: 14.5px; line-height: 1.55; color: #5e5e65; text-align: center; max-width: 560px">Aucun enregistrement pour ce processus. Cliquez sur « Enregistrer l’écran », choisissez l’écran à partager, puis exécutez la tâche comme d’habitude.</p>
+        <video id="scr-preview" autoplay muted playsinline style="display: none; width: 100%; max-height: 70vh; border-radius: 18px; background: #111113"></video>
+      </section>
+
+    <div id="diag-detail" style="display: none; flex-wrap: wrap; gap: 24px; align-items: flex-start; width: 100%">
+
+      <section aria-label="Processus capturé" style="flex: 3 1 560px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px 22px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 0 4px">
+          <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+            <h2 class="task-title" style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em">Préparer une soumission</h2>
+            <div id="epc-diags" style="display: none; flex-wrap: wrap; gap: 8px; margin-top: 10px"></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-left: auto; flex: none">
+          <button type="button" id="epc-delete" title="Supprimer ce processus et ses diagnostics" style="display: none; flex: none; min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: 1.5px solid #c62828; background: #ffffff; color: #c62828">Supprimer</button>
+          <button type="button" id="epc-edit" title="Modifier le processus : cliquez ensuite sur une case pour l’éditer, ou ajoutez une étape, une ressource, un intrant, un sortant ou un système" style="flex: none; min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: 1.5px solid #111113; background: #ffffff; color: #111113">Modifier</button>
+          </div>
+        </div>
+        <div id="epc-tools" style="display: none; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 18px; background: #f1f1f3">
+          <span style="font-size: 12.5px; color: #5e5e65; margin-right: 6px">Cliquez sur une case pour la modifier, ou ajoutez :</span>
+          <button type="button" data-epc-add="step" style="min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 38px; border: none; background: #111113; color: #ffffff">+ Étape</button>
+          <button type="button" data-epc-add="who" style="min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 38px; border: 1.5px solid #111113; background: #ffffff; color: #111113">+ Ressource</button>
+          <button type="button" data-epc-add="in" style="min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 38px; border: 1.5px solid #111113; background: #ffffff; color: #111113">+ Intrant</button>
+          <button type="button" data-epc-add="out" style="min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 38px; border: 1.5px solid #111113; background: #ffffff; color: #111113">+ Sortant</button>
+          <button type="button" data-epc-add="sys" style="min-height: 42px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 38px; border: 1.5px solid #111113; background: #ffffff; color: #111113">+ Système</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px 20px; padding: 12px 4px; border-top: 1px solid #ececef; border-bottom: 1px solid #ececef; font-size: 12.5px; color: #3a3a3f">
+          <span style="display: flex; align-items: center; gap: 8px"><i style="width: 26px; height: 14px; background: #e4e4e8; clip-path: polygon(20% 0, 80% 0, 100% 50%, 80% 100%, 20% 100%, 0 50%)"></i>Événement</span>
+          <span style="display: flex; align-items: center; gap: 8px"><i style="width: 26px; height: 14px; border-radius: 3px; background: #111113"></i>Étape</span>
+          <span style="display: flex; align-items: center; gap: 8px"><i style="width: 26px; height: 14px; border-radius: 50%; border: 1.5px solid #6b6b72; box-sizing: border-box"></i>Qui exécute</span>
+          <span style="display: flex; align-items: center; gap: 8px"><i style="width: 22px; height: 14px; border: 1.5px solid #111113; border-radius: 2px 2px 9px 2px; box-sizing: border-box"></i>Document entrant, sortant</span>
+          <span style="display: flex; align-items: center; gap: 8px"><i style="width: 22px; height: 14px; border: 1.5px solid #111113; border-left: 5px solid #111113; box-sizing: border-box"></i>Système</span>
+        </div>
+
+        <div style="overflow-x: auto">
+          <div id="epc" style="min-width: 600px; display: flex; flex-direction: column; align-items: center">
+
+            <div style="width: 250px; min-height: 58px; box-sizing: border-box; padding: 8px 34px; background: radial-gradient(160% 220% at 80% -60%, #4a4a4f 0%, #1a1a1d 45%, #070708 100%); color: #ffffff; clip-path: polygon(13% 0, 87% 0, 100% 50%, 87% 100%, 13% 100%, 0 50%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; color: #c9c9ce">DÉCLENCHEUR</span><b style="font-size: 13.5px; font-weight: 600">Demande de soumission reçue</b></div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+                        <div style="display: flex; align-items: center">
+              <div style="width: 100px; min-height: 74px; box-sizing: border-box; border: 1.5px solid #6b6b72; border-radius: 50%; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px"><span style="font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: #5e5e65">QUI</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">J. Tremblay</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">ENTRANT 1</span><span style="font-size: 12px">Plans PDF</span></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 150px; min-height: 64px; box-sizing: border-box; border-radius: 10px; padding: 8px 10px; background: radial-gradient(160% 220% at 80% -60%, #4a4a4f 0%, #1a1a1d 45%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 11px; color: #c9c9ce">Étape 1 · 20 min</span><b style="font-size: 13.5px; font-weight: 600; line-height: 1.2">Lire les plans</b></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SORTANT 1</span><span style="font-size: 12px">Relevé des plans</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-left: 6px solid #111113; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SYSTÈME 1</span><span style="font-size: 12px">Revit</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+            <div style="width: 250px; min-height: 54px; box-sizing: border-box; padding: 8px 34px; background: #e4e4e8; clip-path: polygon(13% 0, 87% 0, 100% 50%, 87% 100%, 13% 100%, 0 50%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; color: #5e5e65">ÉVÉNEMENT</span><span style="font-size: 13px">Relevé complété</span></div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+                        <div style="display: flex; align-items: center">
+              <div style="width: 100px; min-height: 92px; box-sizing: border-box; border: 1.5px solid #6b6b72; border-radius: 50%; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px"><span style="font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: #5e5e65">QUI</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">J. Tremblay</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">Estimation</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">ENTRANT 1</span><span style="font-size: 12px">Relevé des plans</span></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 150px; min-height: 64px; box-sizing: border-box; border-radius: 10px; padding: 8px 10px; background: radial-gradient(160% 220% at 80% -60%, #4a4a4f 0%, #1a1a1d 45%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #111113"><span style="font-size: 11px; color: #c9c9ce">Étape 2 · 45 min</span><b style="font-size: 13.5px; font-weight: 600; line-height: 1.2">Estimer les quantités</b><span style="font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #ffffff; color: #111113">Goulot probable</span></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SORTANT 1</span><span style="font-size: 12px">Estimation.xlsx</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-left: 6px solid #111113; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SYSTÈME 1</span><span style="font-size: 12px">Excel</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+            <div style="width: 250px; min-height: 54px; box-sizing: border-box; padding: 8px 34px; background: #e4e4e8; clip-path: polygon(13% 0, 87% 0, 100% 50%, 87% 100%, 13% 100%, 0 50%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; color: #5e5e65">ÉVÉNEMENT</span><span style="font-size: 13px">Quantités estimées</span></div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+                        <div style="display: flex; align-items: center">
+              <div style="width: 100px; min-height: 92px; box-sizing: border-box; border: 1.5px solid #6b6b72; border-radius: 50%; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px"><span style="font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: #5e5e65">QUI</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">A. Côté</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">Approvis.</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">ENTRANT 1</span><span style="font-size: 12px">Estimation.xlsx</span></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 150px; min-height: 64px; box-sizing: border-box; border-radius: 10px; padding: 8px 10px; background: radial-gradient(160% 220% at 80% -60%, #4a4a4f 0%, #1a1a1d 45%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 11px; color: #c9c9ce">Étape 3 · attente 1,5 j</span><b style="font-size: 13.5px; font-weight: 600; line-height: 1.2">Obtenir les prix</b></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SORTANT 1</span><span style="font-size: 12px">Devis fournisseurs</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-left: 6px solid #111113; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SYSTÈME 1</span><span style="font-size: 12px">Outlook</span><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65; margin-top: 3px">SYSTÈME 2</span><span style="font-size: 12px">Excel</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+            <div style="width: 250px; min-height: 54px; box-sizing: border-box; padding: 8px 34px; background: #e4e4e8; clip-path: polygon(13% 0, 87% 0, 100% 50%, 87% 100%, 13% 100%, 0 50%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; color: #5e5e65">ÉVÉNEMENT</span><span style="font-size: 13px">Prix fournisseurs reçus</span></div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+                        <div style="display: flex; align-items: center">
+              <div style="width: 100px; min-height: 104px; box-sizing: border-box; border: 1.5px solid #6b6b72; border-radius: 50%; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px"><span style="font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: #5e5e65">QUI</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">J. Tremblay</span><span style="font-size: 10.5px; font-weight: 600; padding: 2px 7px; border: 1px solid #6b6b72; border-radius: 999px; white-space: nowrap">Dir. projet</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">ENTRANT 1</span><span style="font-size: 12px">Estimation.xlsx</span><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65; margin-top: 3px">ENTRANT 2</span><span style="font-size: 12px">Devis</span></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 150px; min-height: 64px; box-sizing: border-box; border-radius: 10px; padding: 8px 10px; background: radial-gradient(160% 220% at 80% -60%, #4a4a4f 0%, #1a1a1d 45%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 11px; color: #c9c9ce">Étape 4 · 30 min</span><b style="font-size: 13.5px; font-weight: 600; line-height: 1.2">Monter la soumission</b></div>
+              <span style="display: flex; align-items: center"><span style="width: 8px; height: 1.5px; background: #111113"></span><span style="width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid #111113"></span></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-radius: 3px 3px 16px 3px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SORTANT 1</span><span style="font-size: 12px">Soumission.pdf</span></div>
+              <span style="width: 14px; height: 1.5px; background: #111113"></span>
+              <div style="width: 100px; min-height: 52px; box-sizing: border-box; border: 1.5px solid #111113; border-left: 6px solid #111113; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px"><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65">SYSTÈME 1</span><span style="font-size: 12px">Word</span><span style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #5e5e65; margin-top: 3px">SYSTÈME 2</span><span style="font-size: 12px">Excel</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1.5px; height: 22px; background: #111113"></span><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #111113"></span></div>
+            <div style="width: 250px; min-height: 54px; box-sizing: border-box; padding: 8px 34px; background: #e4e4e8; clip-path: polygon(13% 0, 87% 0, 100% 50%, 87% 100%, 13% 100%, 0 50%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center"><span style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.16em; color: #5e5e65">ÉVÉNEMENT</span><span style="font-size: 13px">Soumission envoyée</span></div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <section id="fiche-panel" aria-label="Fiche de l'étape" style="display: none; flex: 2 1 380px; min-width: 0; box-sizing: border-box; flex-direction: column; gap: 16px">
+
+        <div id="fiche" style="background: #ffffff; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18); font-size: 13px">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <span id="fiche-step-label" style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">FICHE DE DONNÉES</span>
+              <h2 id="fiche-step-title" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em">Étape</h2>
+            </div>
+            <button type="button" id="fiche-edit" style="flex: none; min-height: 34px; padding: 0 14px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer">Modifier</button>
+            <button type="button" id="fiche-close" aria-label="Fermer la fiche" style="flex: none; width: 34px; height: 34px; border-radius: 50%; border: none; background: #f1f1f3; font: inherit; font-size: 18px; cursor: pointer">×</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 14px">
+            <div style="display: flex; justify-content: space-between; font-size: 12.5px"><span>Fiche complétée</span><b id="fiche-count">19 / 22 champs</b></div>
+            <span style="display: block; height: 8px; border-radius: 8px; background: #e4e4e8"><span id="fiche-bar" style="display: block; width: 86%; height: 8px; border-radius: 8px; background: #111113"></span></span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; font-size: 12px; color: #5e5e65">
+            <span style="display: flex; align-items: center; gap: 6px"><span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #f1f1f3; color: #3a3a3f">capturé</span>prérempli par l'enregistrement</span>
+            <span style="display: flex; align-items: center; gap: 6px"><span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #111113; color: #ffffff">calculé</span>calculé par Lens</span>
+          </div>
+          <div style="margin-top: 10px; font-size: 11.5px; color: #5e5e65">Opérateurs : = exact · ≈ estimé · ↔ intervalle · ≤ au plus · ≥ au moins</div>
+
+          <div style="margin-top: 18px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">TEMPS</div>
+          <div class="f-row" data-f="tt" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="display: flex; align-items: center; gap: 8px; font-weight: 500">Temps de traitement actif<span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #f1f1f3; color: #3a3a3f">capturé</span></span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>↔</option><option>=</option><option>≈</option><option>≤</option><option>≥</option></select>
+              <div style="display: flex; align-items: center; gap: 4px; min-width: 0"><input aria-label="Minimum" value="30" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0"><span style="font-size: 12px; color: #5e5e65">à</span><input aria-label="Maximum" value="70" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0"></div>
+              <input aria-label="Unité" value="min" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="par dossier" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="wb" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Temps d'attente avant l'étape</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="0,5" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="jour" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="par dossier" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="wa" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Temps d'attente après l'étape</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="1" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="jour" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="par dossier" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 0; border-top: 1px solid #ececef">
+            <span style="display: flex; align-items: center; gap: 8px; font-weight: 500">Temps de cycle global<span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #111113; color: #ffffff">calculé</span></span>
+            <b id="f-cycle" style="font-size: 14px">≈ 1,6 jour</b>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">VOLUME</div>
+          <div class="f-row" data-f="freq" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Fréquence d'exécution</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="14" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="dossiers" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="semaine" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="display: flex; align-items: center; gap: 8px; font-weight: 500">Entrant 1 · <b id="fiche-in1">Relevé des plans</b><span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #f1f1f3; color: #3a3a3f">capturé</span></span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="40" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="pages" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="par dossier" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Sortant 1 · <b id="fiche-out1">Estimation.xlsx</b></span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>=</option><option>≈</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="1" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="fichier" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="par dossier" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Encours / WIP</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="6" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="dossiers" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="en attente" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">CAPACITÉ</div>
+          <div class="f-row" data-f="cap" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Capacité maximale de l'étape</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="12,5" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="dossiers" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="semaine" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Exécutants en parallèle</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>=</option><option>≈</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="2" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="pers." style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" placeholder="période" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 0; border-top: 1px solid #ececef">
+            <span style="display: flex; align-items: center; gap: 8px; font-weight: 500">Taux d'utilisation<span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #111113; color: #ffffff">calculé</span></span>
+            <span style="display: flex; align-items: center; gap: 8px"><b id="f-util" style="font-size: 14px">112 %</b><span id="f-util-badge" style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1.5px solid #111113">Goulot</span></span>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">QUALITÉ</div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">% entrants complets</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="70" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="%" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="dossiers" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">% sortants conformes du premier coup</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="85" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="%" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="dossiers" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div class="f-row" data-f="" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Reprises et corrections</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Valeur" value="2" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="reprises" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="semaine" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">RESSOURCES</div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Rôle responsable</span>
+            <span style="display: flex; flex-wrap: wrap; gap: 6px"><span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1.5px solid #111113; border-radius: 999px" id="fiche-role">J. Tremblay · Estimateur</span></span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Autres exécutants</span>
+            <span style="display: flex; flex-wrap: wrap; gap: 6px"><span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid #a9a9b0; border-radius: 999px" id="fiche-other">M. Bélanger</span><button type="button" aria-label="Ajouter un exécutant" style="width: 30px; height: 30px; border-radius: 50%; border: 1px dashed #6b6b72; background: #ffffff; font: inherit; cursor: pointer">+</button></span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Dépend d'une seule personne ?</span>
+            <span style="display: flex; padding: 3px; border-radius: 999px; background: #f1f1f3"><button type="button" style="min-height: 32px; padding: 0 14px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 12.5px; cursor: pointer">Oui</button><button type="button" style="min-height: 32px; padding: 0 14px; border-radius: 999px; border: none; background: transparent; color: #111113; font: inherit; font-size: 12.5px; cursor: pointer">Non</button></span>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">SYSTÈMES</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="display: flex; align-items: center; gap: 8px; font-weight: 500">Système 1 · <b id="fiche-sys1">Excel</b><span style="font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #f1f1f3; color: #3a3a3f">capturé</span></span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px; align-items: center">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>≈</option><option>=</option><option>↔</option><option>≤</option><option>≥</option></select>
+              <input aria-label="Part du temps" value="90" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <span style="font-size: 12px; color: #5e5e65">% du temps</span>
+              <select aria-label="Niveau d'automatisation" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 12.5px; color: #111113; padding: 0 4px"><option>Auto. 1</option><option>Auto. 0</option><option>Auto. 2</option><option>Auto. 3</option><option>Auto. 4</option><option>Auto. 5</option></select>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">Saisie double ?</span><span id="fiche-double" style="font-size: 12px; color: #5e5e65">Quantités ressaisies depuis Revit</span></span>
+            <span style="display: flex; padding: 3px; border-radius: 999px; background: #f1f1f3"><button type="button" style="min-height: 32px; padding: 0 14px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 12.5px; cursor: pointer">Oui</button><button type="button" style="min-height: 32px; padding: 0 14px; border-radius: 999px; border: none; background: transparent; color: #111113; font: inherit; font-size: 12.5px; cursor: pointer">Non</button></span>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">DÉPENDANCES</div>
+          <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Départements dépendants</span>
+            <span id="fiche-deps" style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center"><select id="fiche-deps-add" aria-label="Ajouter un département" style="height: 32px; border-radius: 999px; border: 1px dashed #6b6b72; background: #ffffff; font: inherit; font-size: 12px; color: #111113; padding: 0 8px"><option>Ajouter…</option></select></span>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">MÉTADONNÉES</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Journée de référence</span>
+            <div style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 72px 92px; gap: 6px">
+              <select aria-label="Opérateur" style="height: 38px; border-radius: 10px; border: 1.5px solid #dcdce0; background: #ffffff; font: inherit; font-size: 13px; color: #111113; padding: 0 4px"><option>=</option><option>≈</option></select>
+              <input aria-label="Valeur" value="8" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Unité" value="heures" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+              <input aria-label="Période" value="par jour" style="height: 38px; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #dcdce0; padding: 0 8px; font: inherit; font-size: 13px; color: #111113; width: 100%; min-width: 0">
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Fiabilité des données</span>
+            <span style="display: flex; padding: 3px; border-radius: 999px; background: #f1f1f3"><button type="button" style="min-height: 32px; padding: 0 12px; border-radius: 999px; border: none; background: transparent; color: #111113; font: inherit; font-size: 12.5px; cursor: pointer">Mesurée</button><button type="button" style="min-height: 32px; padding: 0 12px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 12.5px; cursor: pointer">Estimée</button><button type="button" style="min-height: 32px; padding: 0 12px; border-radius: 999px; border: none; background: transparent; color: #111113; font: inherit; font-size: 12.5px; cursor: pointer">Supposée</button></span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #ececef">
+            <span style="font-weight: 500">Source</span>
+            <span style="display: flex; flex-wrap: wrap; gap: 6px"><span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #111113; color: #ffffff">Enregistrement</span><span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #111113; color: #ffffff">Entrevue</span><span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border: 1px solid #a9a9b0; border-radius: 999px">Données système</span></span>
+          </div>
+          <div style="margin-top: 14px; padding-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #5e5e65">IRRITANTS</div>
+          <label style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid #ececef; font-weight: 500">Ce qui ralentit ou complique l'étape<textarea rows="3" style="box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 10px; font: inherit; font-size: 13px; font-weight: 400; color: #111113; resize: vertical">Les quantités sont ressaisies à la main depuis Revit. Les plans arrivent souvent incomplets.</textarea></label>
+        </div>
+
+        <a href="#tableau" style="min-height: 58px; border-radius: 20px; background: radial-gradient(130% 260% at 90% -60%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.55)" id="fiche-save">Enregistrer la fiche</a>
+      </section>
+
+    </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+</section>
+<section class="screen" id="enregistrement" data-index="5">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="border-radius: 28px; padding: 22px 24px; background: radial-gradient(120% 220% at 85% -40%, #55555a 0%, #1c1c1f 38%, #060607 100%); color: #ffffff; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.5)">
+    <div style="display: flex; align-items: center; gap: 14px; min-width: 0">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 46px; height: 46px; object-fit: contain">
+      <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+        <span class="task-sub" style="font-size: 13px; color: #c9c9ce">Diagnostic · Estimation · Julie Tremblay</span>
+        <h1 class="task-title" style="margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">Préparer une soumission</h1>
+      </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+      <span style="display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 18px; border-radius: 999px; background: #ffffff; color: #111113; font-size: 15px; font-weight: 600"><i id="rec-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #111113; box-shadow: 0 0 0 4px #d6d6db"></i><span id="rec-timer">Enregistrement · 00:00</span></span>
+      <button type="button" style="min-height: 46px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255, 255, 255, 0.6); background: transparent; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer" id="rec-pause">Pause</button>
+      <button type="button" style="min-height: 46px; padding: 0 18px; border-radius: 999px; border: 1.5px solid rgba(255, 255, 255, 0.6); background: transparent; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer" id="rec-note">Note vocale</button>
+      <a id="rec-finish" href="#diagnostic" style="display: flex; align-items: center; min-height: 46px; padding: 0 22px; box-sizing: border-box; border-radius: 999px; background: #ffffff; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600">Terminer</a>
+    </div>
+  </header>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <section aria-label="Aperçu de la capture" style="flex: 3 1 560px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px">
+        <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Ce que Lens capte en ce moment</h2><span style="font-size: 13px; color: #5e5e65">Capture à chaque clic · données sensibles floutées avant tout stockage</span></div>
+        <span id="rec-counter" style="font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; background: #f1f1f3">214 clics · 37 captures</span>
+      </div>
+
+      <div style="border-radius: 18px; border: 1.5px solid #dcdce0; overflow: hidden">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #f4f4f6; border-bottom: 1px solid #e4e4e8; font-size: 12.5px; color: #3a3a3f"><i style="width: 10px; height: 10px; border-radius: 50%; background: #c4c4ca"></i><i style="width: 10px; height: 10px; border-radius: 50%; background: #c4c4ca"></i><i style="width: 10px; height: 10px; border-radius: 50%; background: #c4c4ca"></i><span style="margin-left: 8px; font-weight: 600">Estimation_Projet-Laval.xlsx · Excel</span></div>
+        <div style="position: relative; padding: 14px; background: #ffffff">
+          <div style="display: grid; grid-template-columns: 34px minmax(0, 2.2fr) repeat(4, minmax(0, 1fr)); font-size: 12px; border-top: 1px solid #ececef; border-left: 1px solid #ececef">
+            <span style="padding: 7px; background: #f4f4f6; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><b style="padding: 7px; background: #f4f4f6; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Élément</b><b style="padding: 7px; background: #f4f4f6; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Quantité</b><b style="padding: 7px; background: #f4f4f6; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Unité</b><b style="padding: 7px; background: #f4f4f6; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Prix unit.</b><b style="padding: 7px; background: #f4f4f6; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Total</b>
+            <span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; color: #5e5e65">1</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Béton 30 MPa</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">142</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">m³</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; background: repeating-linear-gradient(45deg, #e4e4e8 0 4px, #f4f4f6 4px 8px); color: #5e5e65">masqué</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; background: repeating-linear-gradient(45deg, #e4e4e8 0 4px, #f4f4f6 4px 8px); color: #5e5e65">masqué</span>
+            <span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; color: #5e5e65">2</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Armature 15M</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; outline: 2px solid #111113; outline-offset: -2px">8,6</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">t</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; background: repeating-linear-gradient(45deg, #e4e4e8 0 4px, #f4f4f6 4px 8px); color: #5e5e65">masqué</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; background: repeating-linear-gradient(45deg, #e4e4e8 0 4px, #f4f4f6 4px 8px); color: #5e5e65">masqué</span>
+            <span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; color: #5e5e65">3</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Coffrage mural</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">610</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">m²</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; background: repeating-linear-gradient(45deg, #e4e4e8 0 4px, #f4f4f6 4px 8px); color: #5e5e65">masqué</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; background: repeating-linear-gradient(45deg, #e4e4e8 0 4px, #f4f4f6 4px 8px); color: #5e5e65">masqué</span>
+            <span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; color: #5e5e65">4</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef">Membrane</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; color: #8a8a92">…</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span>
+            <span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef; color: #5e5e65">5</span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span><span style="padding: 7px; border-right: 1px solid #ececef; border-bottom: 1px solid #ececef"></span>
+          </div>
+          <span style="position: absolute; left: 36%; top: 92px; width: 26px; height: 26px; border-radius: 50%; background: #111113; color: #ffffff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 4px rgba(17, 17, 19, 0.15)">12</span>
+          <span style="position: absolute; left: 30%; top: 150px; width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 1.5px solid #111113; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">13</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-size: 13px; font-weight: 600">Étapes déjà reconnues</span>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+          <span style="display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 12px; background: #111113; color: #ffffff; font-size: 13.5px; font-weight: 600">1 · Lire les plans<span style="font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 999px; background: rgba(255, 255, 255, 0.18)">Revit</span></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5e5e65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          <span style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border-radius: 12px; border: 1.5px solid #111113; font-size: 13.5px; font-weight: 600">2 · Estimer les quantités<span style="font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 999px; background: #f1f1f3">Excel · en cours</span></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5e5e65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          <span style="padding: 8px 13px; border-radius: 12px; border: 1.5px dashed #b9b9bf; color: #5e5e65; font-size: 13.5px">étape suivante…</span>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Actions détectées" style="flex: 2 1 320px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 600">Actions détectées en direct</h2>
+      <ol id="rec-actions" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+        <li style="display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid #ececef"><span style="font-size: 12.5px; color: #5e5e65">00:12</span><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 13.5px">Courriel reçu : demande de soumission</span><span style="align-self: flex-start; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: #f1f1f3">Outlook · déclencheur</span></span></li>
+        <li style="display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid #ececef"><span style="font-size: 12.5px; color: #5e5e65">00:47</span><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 13.5px">Ouverture de Plans_Laval.pdf</span><span style="align-self: flex-start; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: #f1f1f3">Document entrant</span></span></li>
+        <li style="display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid #ececef"><span style="font-size: 12.5px; color: #5e5e65">02:10</span><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 13.5px">Mesures prises dans la maquette</span><span style="align-self: flex-start; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: #f1f1f3">Revit · 46 clics</span></span></li>
+        <li style="display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid #ececef"><span style="font-size: 12.5px; color: #5e5e65">07:31</span><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 13.5px">Création de Estimation_Projet-Laval.xlsx</span><span style="align-self: flex-start; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: #f1f1f3">Excel · document sortant</span></span></li>
+        <li style="display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid #ececef"><span style="font-size: 12.5px; color: #5e5e65">09:02</span><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 13.5px">Quantités ressaisies depuis Revit</span><span style="align-self: flex-start; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #111113; color: #ffffff">Saisie double détectée</span></span></li>
+        <li style="display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid #ececef"><span style="font-size: 12.5px; font-weight: 700">12:48</span><span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 13.5px; font-weight: 600">Saisie des quantités en cours…</span><span style="align-self: flex-start; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1.5px solid #111113">Excel · en direct</span></span></li>
+      </ol>
+      <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #5e5e65">Cliquez sur Terminer quand la tâche est finie : Lens propose le processus cartographié en quelques minutes.</p>
+    </section>
+  </div>
+
+
+</div>
+</div>
+
+</section>
+<section class="screen" id="diagnostic" data-index="6">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+  <nav aria-label="Navigation principale" style="flex: 1 1 232px; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 10px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 44px; height: 44px; object-fit: contain; filter: invert(1)">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <a href="#tableau" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Tableau de bord</a>
+      <a href="#diagnostic" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; background: #111113; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Diagnostics</a>
+      <a href="#analyses" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Analyses IA</a>
+      <a href="#projets" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Projets</a>
+      <a href="#parametres" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Paramètres</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+
+
+    <section aria-label="Sélectionnez le processus" style="display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Sélectionnez le processus</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <button type="button" id="proc-new" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nouveau processus</button>
+          <a id="diag-new" href="#" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nouveau diagnostic</a>
+        </div>
+      </div>
+      <div id="proc-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+        <button type="button" style="border: none; text-align: left; font: inherit; cursor: pointer; border-radius: 22px; padding: 20px; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.55)"><span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; font-weight: 600; letter-spacing: 0.06em"><span>ESTIMATION</span><span>v3</span></span><span style="font-size: 17px; font-weight: 600">Préparer une soumission</span><span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; color: #d4d4d8"><span>•••• 4 étapes</span><span>3 enregistrements</span></span></button>
+        <button type="button" style="border: none; text-align: left; font: inherit; color: #111113; cursor: pointer; border-radius: 22px; padding: 20px; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; background: #ffffff; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)"><span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; font-weight: 600; letter-spacing: 0.06em"><span>APPROVISIONNEMENT</span><span>v1</span></span><span style="font-size: 17px; font-weight: 600">Commander les matériaux</span><span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; color: #5e5e65"><span>•••• 5 étapes</span><span>1 enregistrement</span></span></button>
+        <button type="button" style="border: none; text-align: left; font: inherit; color: #111113; cursor: pointer; border-radius: 22px; padding: 20px; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; background: #ffffff; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)"><span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; font-weight: 600; letter-spacing: 0.06em"><span>FINANCE</span><span>v2</span></span><span style="font-size: 17px; font-weight: 600">Facturer un projet</span><span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; color: #5e5e65"><span>•••• 4 étapes</span><span>2 enregistrements</span></span></button>
+      </div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+</section>
+<section class="screen" id="tableau" data-index="8">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+  <nav aria-label="Navigation principale" style="flex: 1 1 232px; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 10px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 44px; height: 44px; object-fit: contain; filter: invert(1)">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <a href="#tableau" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; background: #111113; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Tableau de bord</a>
+      <a href="#diagnostic" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Diagnostics</a>
+      <a href="#analyses" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Analyses IA</a>
+      <a href="#projets" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Projets</a>
+      <a href="#parametres" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Paramètres</a>
+    </div>
+    <div style="border-radius: 22px; padding: 18px; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 12px; color: #c9c9ce">Diagnostic en cours</span>
+      <span class="side-proc-title" style="font-size: 16px; font-weight: 600; line-height: 1.25">Préparer une soumission</span>
+      <span class="side-proc-sub" style="font-size: 13px; color: #c9c9ce">Estimation · 3 participants</span>
+      <span style="display: block; height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.2)"><span style="display: block; width: 62%; height: 6px; border-radius: 6px; background: #ffffff"></span></span>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 4px 0">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 15px; color: #5e5e65">Bonjour <span id="home-name">Maya</span></span>
+        <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Tableau de bord</h1>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+        <label style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 18px; box-sizing: border-box; background: #ffffff; border-radius: 999px; font-size: 14px; color: #5e5e65">Période<select id="dash-period" style="border: none; outline: none; background: transparent; font: inherit; font-weight: 600; color: #111113"><option>T3 2026</option><option>T2 2026</option><option>Année 2026</option></select></label>
+        <button type="button" class="notif-btn" aria-label="Notifications" style="width: 48px; height: 48px; border-radius: 50%; border: none; background: #ffffff; color: #111113; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="#111113" aria-hidden="true"><path d="M6 16v-5a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/></svg></button>
+        <span style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(160deg, #e9e9ec, #c9c9ce); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; border: 3px solid #ffffff; box-sizing: border-box" id="dash-avatar">—</span>
+      </div>
+    </header>
+
+    <section aria-label="Santé de l'entreprise" style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 600">Santé de l'entreprise</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px">
+        <div style="grid-column: span 2; border-radius: 20px; padding: 16px; min-height: 104px; box-sizing: border-box; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; align-items: center; gap: 14px; box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.55)">
+          <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="10"/><circle id="dash-ring" cx="28" cy="28" r="22" fill="none" stroke="#ffffff" stroke-width="10" stroke-dasharray="0 138" transform="rotate(-90 28 28)"/></svg>
+          <div style="display: flex; flex-direction: column"><span id="dash-health" style="font-size: 30px; font-weight: 700; line-height: 1">—</span><span style="font-size: 13px; color: #d4d4d8">Indice de santé</span></div>
+        </div>
+        <div style="border-radius: 20px; padding: 14px 10px; background: #f4f4f6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 20V12M10 20V6M15 20v-9M20 20V9"/></svg><span id="dash-objs" style="font-size: 12px">0 objectif</span></div>
+        <div style="border-radius: 20px; padding: 14px 10px; background: #f4f4f6; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center"><b id="dash-proc" style="font-size: 22px">0</b><span style="font-size: 12px; color: #5e5e65">Processus</span></div>
+        <div style="border-radius: 20px; padding: 14px 10px; background: #f4f4f6; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center"><b id="dash-goulots" style="font-size: 22px">0</b><span style="font-size: 12px; color: #5e5e65">Goulots</span></div>
+        <div style="border-radius: 20px; padding: 14px 10px; background: #f4f4f6; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center"><b id="dash-sys" style="font-size: 22px">0</b><span style="font-size: 12px; color: #5e5e65">Systèmes</span></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px">
+        <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 500"><span>Couverture du diagnostic</span><b id="dash-cov">0 %</b></div>
+        <span style="display: block; height: 12px; border-radius: 12px; background: #e4e4e8"><span id="dash-cov-bar" style="display: block; width: 0%; height: 12px; border-radius: 12px; background: #111113"></span></span>
+        <span id="dash-cov-text" style="font-size: 13px; color: #5e5e65">Aucun processus cartographié pour l’instant.</span>
+      </div>
+    </section>
+
+    <section aria-label="Objectif global et indicateurs par département" style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Objectif global et indicateurs par département</h2><span style="font-size: 13px; color: #5e5e65">Chaque département traduit l'objectif global en indicateurs : cible, écart calculé, réel mesuré</span></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <label style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; box-sizing: border-box; border-radius: 999px; background: #f1f1f3; font-size: 13px; color: #5e5e65">Objectif<select id="dash-obj" style="border: none; outline: none; background: transparent; font: inherit; font-weight: 600; color: #111113"></select></label>
+          <button type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer" id="dash-ind-add">+ Indicateur</button>
+        </div>
+      </div>
+
+      <div id="dash-global" style="align-self: center; margin-top: 22px; border-radius: 20px; padding: 18px 40px; text-align: center; background: radial-gradient(130% 200% at 85% -40%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.55)">
+        <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #c9c9ce">OBJECTIF GLOBAL · FINANCIER</span>
+        <b style="font-size: 42px; line-height: 1.05; letter-spacing: -0.02em">14 à 16 %</b>
+        <span style="font-size: 14px; color: #e4e4e8">de profitabilité sur les contrats de construction</span>
+        <span style="margin-top: 6px; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: #ffffff; color: #111113">Réel 10 à 12 % · écart −4 pts</span>
+      </div>
+      <span style="align-self: center; width: 1.5px; height: 24px; background: #111113"></span>
+      <div style="position: relative; height: 0"><span style="position: absolute; left: 12.5%; right: 12.5%; top: 0; height: 1.5px; background: #111113"></span></div>
+
+      <div id="dash-cols" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; align-items: start">
+        <p id="dash-cols-empty" style="grid-column: 1 / -1; margin: 0; border-radius: 20px; padding: 24px; background: #f4f4f6; text-align: center; font-size: 14px; color: #5e5e65">Aucun indicateur pour l’instant. Fixez un objectif global dans Objectifs, ou ajoutez un indicateur avec « + Indicateur ».</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 18px; padding-top: 14px; border-top: 1px solid #ececef; font-size: 12.5px; color: #3a3a3f">
+        <span style="display: flex; align-items: center; gap: 8px"><i style="width: 22px; height: 14px; border-radius: 4px; background: #e4e4e8"></i>Cible</span>
+        <span style="display: flex; align-items: center; gap: 8px"><i style="width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid #111113; box-sizing: border-box"></i>Écart calculé</span>
+        <span style="display: flex; align-items: center; gap: 8px"><i style="width: 22px; height: 14px; border-radius: 4px; background: #111113"></i>Réel mesuré</span>
+        <span style="display: flex; align-items: center; gap: 8px"><i style="width: 22px; height: 14px; border-radius: 4px; border: 1.5px dashed #b9b9bf; box-sizing: border-box"></i>Donnée manquante</span>
+      </div>
+    </section>
+
+    <section aria-label="Hiérarchie des départements" style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 6px; max-width: 560px">
+          <span style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; color: #5e5e65" id="dash-tree-badge-wrap"><span id="dash-tree-badge">ORGANIGRAMME · 0 DÉPARTEMENT</span></span>
+          <h2 style="margin: 0; font-size: 22px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em">Diagramme des utilisateurs</h2>
+          <p style="margin: 0; font-size: 13.5px; line-height: 1.5; color: #5e5e65">Chaque département hérite des objectifs de son parent. Les responsables et les effectifs viennent des étapes Départements et Utilisateurs.</p>
+        </div>
+        <button type="button" style="min-height: 46px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer" id="struct-edit">Modifier la structure</button>
+      </div>
+      <div id="dash-tree" style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; margin-top: 8px"></div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+      <section aria-label="Cartographie des systèmes" style="flex: 1 1 100%; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Cartographie des systèmes</h2><span style="font-size: 13px; color: #5e5e65">Taille = nombre d'étapes qui utilisent le système · trait = échange de données</span></div>
+          <div style="display: flex; padding: 4px; border-radius: 999px; background: #f1f1f3">
+            <button type="button" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 13px; cursor: pointer" id="sys-usage">Usage</button>
+            <button type="button" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: none; background: transparent; color: #111113; font: inherit; font-size: 13px; cursor: pointer" id="sys-cost">Coût</button>
+          </div>
+        </div>
+        <div id="dash-sysmap" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; padding: 10px 0; min-height: 80px"></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px">
+          <div style="border-radius: 16px; padding: 12px 14px; background: #f4f4f6; display: flex; flex-direction: column; gap: 2px"><b id="dash-sys-n" style="font-size: 22px">0</b><span style="font-size: 12.5px; color: #5e5e65">systèmes utilisés</span></div>
+          <div style="border-radius: 16px; padding: 12px 14px; background: #111113; color: #ffffff; display: flex; flex-direction: column; gap: 2px"><b id="dash-sys-double" style="font-size: 22px">0</b><span style="font-size: 12.5px; color: #d4d4d8">échanges manuels à automatiser</span></div>
+          <div style="border-radius: 16px; padding: 12px 14px; background: #f4f4f6; display: flex; flex-direction: column; gap: 2px"><b id="dash-sys-steps" style="font-size: 22px">0</b><span style="font-size: 12.5px; color: #5e5e65">étapes observées</span></div>
+        </div>
+      </section>
+
+      <section aria-label="Projets d'amélioration continue" style="flex: 1 1 100%; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Projets d'amélioration continue</h2><span style="font-size: 13px; color: #5e5e65">Calendrier des projets : plein = en cours, contour = à faire, gris = terminé · le trait vertical marque aujourd'hui</span></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <button type="button" id="gantt-add" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">+ Projet</button>
+            <a href="#projets" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; color: #111113; text-decoration: none; font-size: 14px; font-weight: 500">Gérer les projets</a>
+          </div>
+        </div>
+        <div style="overflow-x: auto"><div id="gantt" style="min-width: 760px; display: flex; flex-direction: column"></div></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+</div>
+
+</section>
+<section class="screen" id="analyses" data-index="9">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+  <nav aria-label="Navigation principale" style="flex: 1 1 232px; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 10px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 44px; height: 44px; object-fit: contain; filter: invert(1)">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <a href="#tableau" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Tableau de bord</a>
+      <a href="#diagnostic" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Diagnostics</a>
+      <a href="#analyses" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; background: #111113; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Analyses IA</a>
+      <a href="#projets" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Projets</a>
+      <a href="#parametres" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Paramètres</a>
+    </div>
+    <div style="border-radius: 22px; padding: 18px; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 12px; color: #c9c9ce">Diagnostic en cours</span>
+      <span class="side-proc-title" style="font-size: 16px; font-weight: 600; line-height: 1.25">Préparer une soumission</span>
+      <span class="side-proc-sub" style="font-size: 13px; color: #c9c9ce">Estimation · 3 participants</span>
+      <span style="display: block; height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.2)"><span style="display: block; width: 62%; height: 6px; border-radius: 6px; background: #ffffff"></span></span>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 4px 0">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 14px; color: #5e5e65">Lectures automatiques des données du diagnostic</span>
+        <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Analyses IA</h1>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px"><button id="ia-refresh" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Régénérer les analyses</button></div>
+    </header>
+
+    <section aria-label="Constats" style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Constats prioritaires</h2><span id="ia-count" style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #f1f1f3">0 constat</span></div>
+      <div id="ia-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px"></div>
+    </section>
+
+    <section aria-label="Feuille de route" style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px"><h2 style="margin: 0; font-size: 18px; font-weight: 600">Feuille de route proposée</h2><button id="ia-export" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Exporter (CSV)</button></div>
+      <ol id="ia-plan" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column"></ol>
+    </section>
+  </main>
+</div>
+</div>
+
+</section>
+<section class="screen" id="projets" data-index="10">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+  <nav aria-label="Navigation principale" style="flex: 1 1 232px; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 10px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 44px; height: 44px; object-fit: contain; filter: invert(1)">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <a href="#tableau" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Tableau de bord</a>
+      <a href="#diagnostic" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Diagnostics</a>
+      <a href="#analyses" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Analyses IA</a>
+      <a href="#projets" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; background: #111113; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Projets</a>
+      <a href="#parametres" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Paramètres</a>
+    </div>
+    <div style="border-radius: 22px; padding: 18px; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 12px; color: #c9c9ce">Diagnostic en cours</span>
+      <span class="side-proc-title" style="font-size: 16px; font-weight: 600; line-height: 1.25">Préparer une soumission</span>
+      <span class="side-proc-sub" style="font-size: 13px; color: #c9c9ce">Estimation · 3 participants</span>
+      <span style="display: block; height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.2)"><span style="display: block; width: 62%; height: 6px; border-radius: 6px; background: #ffffff"></span></span>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 4px 0">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 14px; color: #5e5e65">Chantiers d'amélioration issus des diagnostics</span>
+        <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Projets</h1>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px"><button id="prj-add" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">+ Nouveau projet</button></div>
+    </header>
+
+    <section aria-label="Projets" style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px" id="prj-filters">
+        <button type="button" data-filter="" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 13px; cursor: pointer">Tous</button>
+        <button type="button" data-filter="À faire" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13px; cursor: pointer">À faire</button>
+        <button type="button" data-filter="En cours" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13px; cursor: pointer">En cours</button>
+        <button type="button" data-filter="Terminé" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: none; background: #f1f1f3; color: #111113; font: inherit; font-size: 13px; cursor: pointer">Terminé</button>
+      </div>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="color: #5e5e65; font-size: 12.5px; text-align: left"><th style="font-weight: 500; padding: 6px 8px 10px 0">Projet</th><th style="font-weight: 500; padding: 6px 8px 10px">Département</th><th style="font-weight: 500; padding: 6px 8px 10px">Responsable</th><th style="font-weight: 500; padding: 6px 8px 10px">Gain visé</th><th style="font-weight: 500; padding: 6px 8px 10px">Statut</th><th style="padding: 6px 0 10px 8px"></th></tr></thead>
+          <tbody id="prj-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+</div>
+
+</section>
+<section class="screen" id="parametres" data-index="11">
+<div style="min-height: 100vh; box-sizing: border-box; padding: 24px; background: #e8e8eb; color: #111113; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif">
+<div style="max-width: 1392px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+  <nav aria-label="Navigation principale" style="flex: 1 1 232px; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 24px 16px; display: flex; flex-direction: column; gap: 28px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 10px">
+      <img src="assets/logo-blanc.png" alt="Lens" style="width: 44px; height: 44px; object-fit: contain; filter: invert(1)">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <a href="#tableau" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Tableau de bord</a>
+      <a href="#diagnostic" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Diagnostics</a>
+      <a href="#analyses" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Analyses IA</a>
+      <a href="#projets" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; color: #111113; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Projets</a>
+      <a href="#parametres" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 15px; background: #111113; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Paramètres</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 4px 0">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 14px; color: #5e5e65">Espace, données et compte</span>
+        <h1 style="margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em">Paramètres</h1>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px"></div>
+    </header>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+      <section aria-label="Espace de l'entreprise" style="flex: 3 1 480px; min-width: 0; box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Espace de l'entreprise</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; grid-column: span 2">Nom de l'entreprise<input id="set-name" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; min-width: 0; background: #ffffff"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Secteur<select id="set-sector" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; min-width: 0; background: #ffffff"><option>Construction</option><option>Architecture</option><option>Gestion immobilière</option><option>Manufacturier</option></select></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Taille<select id="set-size" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; min-width: 0; background: #ffffff"><option>10 à 49 employés</option><option>50 à 99 employés</option><option>100 à 249 employés</option></select></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; grid-column: span 2">Courriel de la direction<input id="set-email" type="email" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; min-width: 0; background: #ffffff"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Prénom affiché sur le tableau de bord<input id="set-first" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; min-width: 0; background: #ffffff"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Journée de référence (heures)<input id="set-day" type="number" min="1" max="24" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #dcdce0; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 400; color: #111113; min-width: 0; background: #ffffff"></label>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px"><button id="set-save" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Enregistrer</button></div>
+      </section>
+
+      <section aria-label="Données et compte" style="flex: 2 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <div style="box-sizing: border-box; background: #ffffff; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 48px -28px rgba(17, 17, 19, 0.18)">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 600">Données</h2>
+          <p id="set-stats" style="margin: 0; font-size: 13.5px; line-height: 1.5; color: #5e5e65"></p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <button id="set-export" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Exporter l'espace (JSON)</button>
+            <button id="set-import" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Importer (JSON)</button>
+            <button id="set-reset" type="button" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #111113; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Réinitialiser la démo</button>
+          </div>
+        </div>
+        <div style="border-radius: 28px; padding: 24px; background: radial-gradient(130% 160% at 90% -10%, #4a4a4f 0%, #1a1a1d 40%, #070708 100%); color: #ffffff; display: flex; flex-direction: column; gap: 10px">
+          <b style="font-size: 15px">Compte</b>
+          <span id="set-account" style="font-size: 13.5px; line-height: 1.5; color: #d4d4d8"></span>
+          <button id="set-logout" type="button" style="align-self: flex-start; min-height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Se déconnecter</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</div>
+
+</section>
+<!-- messages et boîtes de dialogue de l'application (lens.js) -->
+<div id="toasts" style="position: fixed; right: 16px; bottom: 16px; z-index: 70; display: flex; flex-direction: column; gap: 8px; font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif"></div>
+<dialog id="dlg" style="border: none; border-radius: 24px; padding: 0; max-width: min(520px, calc(100vw - 32px)); width: 100%; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45); font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif; color: #111113">
+  <form method="dialog" id="dlg-form" style="display: flex; flex-direction: column; gap: 16px; padding: 28px">
+    <h2 id="dlg-title" style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em"></h2>
+    <p id="dlg-text" style="margin: 0; font-size: 14px; line-height: 1.5; color: #5e5e65"></p>
+    <div id="dlg-fields" style="display: flex; flex-direction: column; gap: 12px"></div>
+    <div style="display: flex; justify-content: flex-end; gap: 10px">
+      <button type="button" id="dlg-cancel" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #dcdce0; background: #ffffff; color: #111113; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Annuler</button>
+      <button type="submit" id="dlg-ok" style="min-height: 44px; padding: 0 20px; border-radius: 999px; border: none; background: #111113; color: #ffffff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Confirmer</button>
+    </div>
+  </form>
+</dialog>
+<input type="file" id="file-in" hidden>
+<script>
+(function(){
+  var ids = ['connexion', 'departements', 'utilisateurs', 'objectifs', 'tableau', 'nouveau-diagnostic', 'enregistrement', 'diagnostic', 'analyses', 'projets', 'parametres'];
+  function current(){ var h = location.hash.slice(1); var i = ids.indexOf(h); return i < 0 ? 0 : i; }
+  function go(i){ if (i < 0 || i >= ids.length) return; location.hash = ids[i]; window.scrollTo(0, 0); }
+  window.addEventListener('hashchange', function(){ window.scrollTo(0, 0); });
+  document.addEventListener('keydown', function(e){
+    var t = e.target; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
+    if (document.getElementById('dlg').open) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(current() + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(current() - 1); e.preventDefault(); }
+  });
+})();
+</script>
+<script>
+  // lens.js est chargé avec un horodatage unique : le navigateur et le CDN ne servent jamais une version périmée
+  (function () { var s = document.createElement('script'); s.src = 'lens.js?t=' + Date.now(); s.async = false; document.body.appendChild(s); })();
+</script>
+</body>
+</html>

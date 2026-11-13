@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="title_erp">Connexion | Groupe Lounici</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico?v=3" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png?v=3">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png?v=3">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=23">
+</head>
+<!-- ERP de Groupe Lounici (erp.lounici.ca) : page de connexion ; après connexion → portail.html -->
+<body class="erp-login">
+
+  <div class="portal-wrap">
+    <header class="hero-top">
+      <a class="brand brand-hero" href="https://lounici.ca/" aria-label="Groupe Lounici — accueil" data-i18n-attr="aria-label=brand_home">
+        <img src="assets/logo-blanc.png" alt="Groupe Lounici" class="brand-mark">
+        <span class="brand-name" aria-hidden="true">Groupe Lounici</span>
+      </a>
+      <div class="nav-right">
+        <div class="lang" aria-label="Langue" data-i18n-attr="aria-label=lang_label">
+          <a href="#" hreflang="en" lang="en">EN</a>
+          <span aria-hidden="true">|</span>
+          <a href="#" hreflang="fr" lang="fr" class="is-on" aria-current="true">FR</a>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <dialog class="login-modal" id="portail" aria-labelledby="portail-titre">
+    <h2 class="modal-title" id="portail-titre" data-i18n="modal_title">Bienvenue, connectez-vous<br>à votre compte.</h2>
+    <form class="login-form" novalidate>
+      <label class="field"><span class="small" data-i18n="m_user">Identifiant ou courriel</span><input type="text" name="identifiant" autocomplete="username" placeholder="nom@domaine.com" autofocus required data-i18n-attr="placeholder=m_user_ph"></label>
+      <label class="field"><span class="small" data-i18n="m_pass">Mot de passe</span><input type="password" name="mot-de-passe" autocomplete="current-password" placeholder="Votre mot de passe" required data-i18n-attr="placeholder=m_pass_ph"></label>
+      <div class="form-foot">
+        <button type="submit" class="btn btn-black" data-i18n="m_submit">Se connecter</button>
+        <a class="small lost" href="lens.html?vue=login" data-i18n="m_lost">Mot de passe oublié ?</a>
+      </div>
+      <p class="login-msg small" hidden>Veuillez saisir votre identifiant et votre mot de passe.</p>
+    </form>
+  </dialog>
+
+  <script src="lens-config.js?v=1"></script>
+  <script src="lens-cloud.js?v=1"></script>
+  <script src="script.js?v=19"></script>
+</body>
+</html>

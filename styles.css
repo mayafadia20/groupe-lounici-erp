@@ -1,0 +1,422 @@
+/* =====================================================================
+   Groupe Lounici — Feuille de style
+   Direction : studio monochrome sur fond blanc pur. Héros à empennage
+   noir, énoncé en deux tons sur noir, carrousel d’expertises, duo de
+   formulaire de contact seul et centré. Toutes les couleurs passent par les tokens.
+   ===================================================================== */
+
+:root {
+  --white: #ffffff;          /* fond de page : blanc pur */
+  --grey: #f4f5f6;           /* gris clair neutre (fond du carrousel, champs) */
+  --grey-2: #e8e9eb;
+  --black: #0a0a0a;
+  --card-dark: #141414;
+  --ink: #0a0a0a;
+  --ink-2: #4b4b4b;
+  --muted: #8a8a86;
+  --dim: #8d8d8a;            /* seconde moitié des titres et énoncés */
+  --line: rgba(10, 10, 10, 0.1);
+  --line-dark: rgba(255, 255, 255, 0.14);
+  --display: "Inter Tight", "Inter", system-ui, sans-serif;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pad: clamp(20px, 3.2vw, 48px);
+  --r: 8px;
+  --r-card: 18px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+/* chaque panneau occupe la fenêtre ; le défilement s'arrête de section en section */
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  overflow-x: clip;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p { margin: 0; }
+ol, ul { margin: 0; padding: 0; list-style: none; }
+
+/* ── Typographie ── */
+.h-xl, .h-lead, .hero-title, h3 { font-family: var(--display); font-weight: 400; letter-spacing: -0.03em; line-height: 1.05; }
+.h-xl { font-size: clamp(34px, 4.4vw, 64px); }
+.h-lead { font-size: clamp(24px, 2.4vw, 36px); }
+h3 { font-size: clamp(18px, 1.6vw, 24px); }
+.dim { color: var(--dim); }
+.small { font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--ink-2); line-height: 1.45; }
+.body-m { font-size: clamp(13px, 1.05vw, 15px); line-height: 1.55; color: var(--ink-2); max-width: 46ch; }
+.align-right { text-align: right; }
+.pt { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pt-ring { width: 10px; height: 10px; background: none; border: 1.5px solid currentColor; }
+.pt-live { background: #2ecc71; }
+
+/* ── Boutons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-radius: 999px;
+  font: inherit; font-size: 12px; font-weight: 500;
+  border: 1px solid transparent; cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-black { background: var(--black); color: #fff; }
+.btn-black:hover { background: #2a2a2a; }
+.btn-white { background: #fff; color: var(--black); }
+.btn-white:hover { background: var(--grey-2); }
+
+/* ── Panneaux ── */
+.panel {
+  position: relative;
+  min-height: 100vh; min-height: 100svh;
+  padding: 72px var(--pad) 48px;
+  display: flex; flex-direction: column; justify-content: center;
+  scroll-snap-align: start;
+}
+.panel.light { background: var(--white); color: var(--ink); }
+.panel.dark { background: var(--black); color: #fff; }
+.panel.dark .small { color: rgba(255,255,255,0.6); }
+.panel.dark .dim { color: rgba(255,255,255,0.42); }
+
+/* ── 1. Héros ── */
+.hero {
+  --hero-top-h: 64px;        /* hauteur de la barre logo + menu */
+  background: var(--white) url("assets/fond-heros.webp?v=3") no-repeat center var(--hero-top-h) / cover;
+  padding: 0 var(--pad) 0; justify-content: space-between; overflow: hidden;
+}
+/* barre blanche pleine largeur, séparée de la photo par un trait gris */
+.hero-top {
+  display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 24px; position: relative; z-index: 3;
+  height: var(--hero-top-h); margin: 0 calc(-1 * var(--pad)); padding: 0 var(--pad);
+  background: var(--white); border-bottom: 1px solid var(--line);
+}
+.brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.brand-mark { width: 16px; }
+.brand-hero { font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; text-transform: uppercase; }
+.brand-hero .brand-mark { width: 30px; filter: invert(1); }
+/* au survol du logo, le nom apparaît à sa droite ; il disparaît dès que le curseur quitte le logo */
+.brand-hero { position: relative; }
+.brand-name {
+  position: absolute; left: calc(100% + 10px); top: 50%; transform: translate(-6px, -50%);
+  font-size: 15px; font-weight: 600; letter-spacing: -0.02em; text-transform: none; white-space: nowrap; color: var(--ink);
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.brand-hero:hover .brand-name, .brand-hero:focus-visible .brand-name { opacity: 1; transform: translate(0, -50%); }
+/* menu centré dans la barre, quelle que soit la largeur du logo et des liens de droite */
+.nav-links { display: flex; gap: 26px; position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-50%); font-size: 11px; font-weight: 500; color: var(--ink-2); }
+.nav-links > * { display: inline-flex; align-items: center; height: 100%; position: relative; }
+.nav-links a:hover { color: var(--ink); }
+/* bouton « Our expertise » : même aspect qu'un lien, chevron qui se retourne quand le menu est ouvert */
+.has-menu { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; gap: 5px; }
+.has-menu .chev { width: 10px; height: 10px; transition: transform 0.2s; }
+.has-menu:hover, .has-menu[aria-expanded="true"] { color: var(--ink); }
+.has-menu[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.has-menu[aria-expanded="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); }
+/* grand menu : panneau blanc pleine largeur sous la barre, liste sur trois colonnes */
+.mega {
+  position: absolute; left: 0; right: 0; top: 100%; z-index: 6;
+  padding: 36px var(--pad) 44px; background: var(--white); border-bottom: 1px solid var(--line);
+  box-shadow: 0 24px 40px -24px rgba(10, 10, 10, 0.18);
+}
+.mega-title { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 24px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 26px; }
+.mega-title span { transition: transform 0.2s; }
+.mega-title:hover span { transform: translateX(4px); }
+.mega-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: column; grid-template-rows: repeat(4, auto); gap: 18px 32px; max-width: 1100px; }
+.mega-list a { font-size: 14px; color: var(--ink-2); }
+.mega-list a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+/* à droite : portail client (icône de personne) et choix de langue */
+.nav-right { display: flex; align-items: center; gap: 22px; justify-self: end; font-size: 11px; font-weight: 500; color: var(--ink-2); }
+.nav-portal { display: inline-flex; align-items: center; gap: 7px; }
+.nav-portal svg { width: 16px; height: 16px; }
+.nav-portal:hover { color: var(--ink); }
+.lang { display: inline-flex; align-items: center; gap: 6px; }
+.lang span { color: var(--muted); }
+.lang a:hover, .lang a.is-on { color: var(--ink); }
+.nav-toggle {
+  display: none; width: 38px; height: 38px; border: 1px solid var(--line); background: var(--white); border-radius: var(--r);
+  cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; justify-self: end;
+}
+.nav-toggle span { display: block; width: 16px; height: 1.5px; background: var(--ink); }
+
+.hero-body {
+  position: relative; flex: 1; min-height: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr) minmax(0, 1fr); grid-template-rows: 1fr auto;
+  align-items: center; column-gap: 24px; row-gap: 24px; padding-bottom: 36px;
+}
+.hero-body > * { position: relative; z-index: 2; }
+.hero-text { grid-column: 1; grid-row: 1 / span 2; align-self: center; padding: 24px 0; }
+.hero-cta { margin-top: 28px; }
+/* carte outil en bas à droite */
+.hero-card {
+  grid-column: 3; grid-row: 2; align-self: end; justify-self: end;
+  position: relative; width: 250px; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; color: #fff;
+  background: #0a0a0a url("assets/outil-diagnostic.jpg?v=1") center / cover; display: grid; grid-template-rows: auto 1fr; padding: 12px 14px;
+}
+.hero-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.65)); }
+.hero-card > * { position: relative; }
+.hero-card-tag { display: flex; justify-content: space-between; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; }
+.hero-card-body { align-self: end; display: grid; gap: 2px; }
+.hero-card-title { font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: -0.02em; line-height: 1; }
+.hero-card-body .small { color: rgba(255,255,255,0.75); }
+.hero-card-arrow { position: absolute; right: 12px; bottom: 12px; width: 34px; height: 34px; border-radius: 50%; background: #fff; color: var(--ink); display: grid; place-items: center; font-size: 15px; transition: transform 0.2s ease; }
+.hero-card:hover .hero-card-arrow { transform: scale(1.08); }
+.hero-kicker { font-size: 12px; font-weight: 500; color: var(--ink-2); margin-bottom: 36px; }
+.hero-kicker sup { font-size: 9px; margin-left: 4px; color: var(--muted); }
+.hero-title { font-size: clamp(32px, 4.2vw, 62px); font-weight: 600; letter-spacing: -0.035em; margin-bottom: 28px; }
+.hero-title .dim { font-weight: 400; }
+.hero-lead { font-size: clamp(13px, 1vw, 15px); line-height: 1.6; color: var(--ink-2); max-width: 44ch; }
+
+/* ── 2. Énoncé ── */
+.statement-panel { justify-content: space-between; padding-top: 0; padding-bottom: 0; }
+.strip {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0; border-bottom: 1px solid var(--line-dark);
+  text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px;
+}
+.strip-bottom { border-bottom: none; border-top: 1px solid var(--line-dark); height: 44px; }
+.scroll-dot { font-style: normal; margin-left: 6px; }
+.statement { max-width: 820px; margin: 0 auto; text-align: center; padding: 40px 0; }
+.statement-text { font-family: var(--display); font-weight: 400; font-size: clamp(22px, 2.6vw, 40px); letter-spacing: -0.03em; line-height: 1.18; }
+.statement-sub { margin-top: 36px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8); }
+
+/* ── 3. Expertises : carrousel de cartes (référence : carte blanche très arrondie, voisines derrière) ── */
+/* Cotes de référence pour un écran de 1662 px : carte 760 × 340, tuile 370 × 320, rayons 85 (carte) et 80 (tuile),
+   voisines visibles sur 160 px de chaque côté. Tout est exprimé en fraction de la largeur de carte. */
+.panel.expo {
+  padding-top: 48px; padding-left: 0; padding-right: 0; overflow: hidden; background: #f5f6f7; justify-content: flex-start;
+  --card-w: min(760px, 45.73vw, calc((100vh - 400px) * 2.235));
+  /* écart tel que la voisine (réduite à 84 %) ne montre que 160 px : marge latérale − retrait d'échelle − 160 */
+  --card-gap: calc((100vw - var(--card-w)) / 2 - var(--card-w) * 0.08 - 160px);
+  --card-pad: calc(var(--card-w) * 0.01053);   /* 8 / 760 : avec la bordure de 2 px, la tuile fait 320 de haut */
+  --card-r: calc(var(--card-w) * 0.11184);     /* 85 / 760 */
+  --tile-w: calc(var(--card-w) * 0.48684);     /* 370 / 760 */
+  --tile-r: calc(var(--card-w) * 0.10526);     /* 80 / 760 */
+}
+.expo-head { text-align: center; padding: 0 var(--pad); margin-bottom: 55px; }
+.expo-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 11px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--ink-2); text-transform: uppercase; font-size: 9px; letter-spacing: 0.1em; }
+.expo-head .h-xl { margin-top: 14px; font-weight: 500; }
+.caro { position: relative; width: 100%; margin-top: auto; }   /* la carte se centre entre le titre et les points */
+.caro-track { display: flex; gap: var(--card-gap); will-change: transform; transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.caro-card {
+  position: relative; z-index: 1;
+  flex: 0 0 var(--card-w); width: var(--card-w); aspect-ratio: 760 / 340;
+  display: grid; grid-template-columns: var(--tile-w) minmax(0, 1fr); gap: 30px;
+  padding: var(--card-pad); border-radius: var(--card-r); background: #fff; border: 2px solid #e9eaec;
+  box-shadow: 0 1px 0 rgba(10,10,10,0.04);
+  transform: scale(0.84); opacity: 0.7;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.7s ease, box-shadow 0.7s ease;
+}
+.caro-card.is-active { z-index: 2; transform: none; opacity: 1; box-shadow: 0 30px 70px -30px rgba(10,10,10,0.28), 0 8px 24px rgba(10,10,10,0.06); }
+.caro-visual {
+  height: 100%; min-height: 0; border-radius: var(--tile-r); display: grid; place-items: center;
+  color: rgba(255,255,255,0.9);
+  background: linear-gradient(165deg, #2b2f34 0%, #1c2024 45%, #121518 100%);
+  box-shadow: 0 24px 50px -24px rgba(10,10,10,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.caro-visual svg { width: 52%; height: auto; filter: drop-shadow(0 10px 18px rgba(0,0,0,0.5)); }
+/* image d'illustration : couvre toute la tuile ; l'icône au trait reste pour les expertises sans image */
+.caro-visual { position: relative; overflow: hidden; }
+.caro-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.caro-visual.has-img svg { display: none; }
+.caro-body { display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: clamp(10px, 2.2vw, 28px) clamp(14px, 2.4vw, 36px) clamp(10px, 2vw, 24px) 0; min-width: 0; min-height: 0; }
+.caro-tag { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); text-transform: uppercase; letter-spacing: 0.12em; font-size: 10px; font-weight: 700; }
+.caro-tag .brand-mark { filter: invert(1); width: 16px; }
+.caro-body h3 { font-size: clamp(20px, 1.9vw, 30px); font-weight: 600; letter-spacing: -0.025em; margin-top: 4px; }
+.caro-body p { color: var(--ink-2); font-size: 13.5px; max-width: 44ch; }
+.caro-more { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.caro-more .pt-ring { border-color: var(--muted); }
+.caro-btn {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+  font: inherit; font-size: 16px; line-height: 1;
+  display: grid; place-items: center; transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 20px -8px rgba(10,10,10,0.35);
+}
+.caro-btn:hover { transform: translateY(-50%) scale(1.06); }
+/* flèches au milieu de l’espace entre la voisine visible (160 px) et la carte active */
+.caro-prev { left: max(var(--pad), calc((100% - var(--card-w)) / 4 + 58px)); background: #fff; color: var(--ink); }
+.caro-next { right: max(var(--pad), calc((100% - var(--card-w)) / 4 + 58px)); background: var(--black); color: #fff; }
+/* points + bouton centrés dans l’espace libre sous la carte */
+.caro-dots { display: flex; justify-content: center; gap: 6px; margin-top: auto; padding-top: calc(22px + 8vh); }
+.caro-dot { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 3px; background: rgba(10,10,10,0.14); cursor: pointer; transition: width 0.3s ease, background 0.3s ease; }
+.caro-dot.is-on { width: 22px; background: var(--ink); }
+.expo-foot { text-align: center; margin-top: 22px; margin-bottom: auto; }
+
+/* ── 4. À propos : silhouette en arrière-plan à droite, texte à gauche ── */
+.panel.about {
+  position: relative; justify-content: center;
+  background: #fff url("assets/a-propos.webp") no-repeat right center / cover;
+}
+.about-text { max-width: 560px; display: grid; gap: 16px; }
+.about-title { font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; font-size: clamp(28px, 3.2vw, 50px); margin-bottom: 18px; }
+.about-title .dim { font-weight: 400; }
+.about-text p { font-size: clamp(15px, 1.15vw, 18px); line-height: 1.5; color: var(--ink); max-width: 46ch; }
+.about-foot { position: absolute; left: var(--pad); right: var(--pad); bottom: 26px; text-align: left; color: var(--muted); }
+
+/* ── 6. Contact : la carte remplit la fenêtre, le formulaire est centré dedans ── */
+.contact { padding: 16px var(--pad); display: flex; flex-direction: column; }
+.login {
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: clamp(28px, 4vw, 56px) var(--pad);
+  background: #fff; border: 1px solid var(--line); border-radius: var(--r-card);
+}
+.login > * { width: 100%; }
+.login .h-lead { margin-bottom: 22px; }
+.site-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 18px 4px 0; color: var(--muted); }
+.contact-form { display: grid; gap: 12px; }
+.field { display: grid; gap: 6px; }
+.field .small { color: var(--muted); }
+.field input, .field textarea {
+  width: 100%; padding: 13px 14px;
+  font: inherit; font-size: 14px; color: var(--ink);
+  background: var(--grey); border: 1px solid transparent; border-radius: var(--r);
+}
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--ink); background: #fff; }
+.field textarea { resize: vertical; }
+.form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; }
+
+/* ── Portail client : page des outils ── */
+/* la page tient dans la fenêtre : barre en haut, puis le reste réparti sans défilement */
+.portail { --hero-top-h: 64px; height: 100vh; height: 100svh; display: flex; flex-direction: column; }
+.portail .portal-wrap { flex: none; }
+.portal-wrap { padding: 0 var(--pad); }
+.nav-links a.is-active { color: var(--ink); }
+.nav-links a.is-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); }
+.portal-main { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: clamp(24px, 5vh, 56px) var(--pad) clamp(24px, 5vh, 48px); }
+.portal-main > section { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.portal-main .h-xl { font-size: clamp(30px, 4.6vh, 64px); }
+.portal-main .body-m { margin-top: clamp(10px, 2vh, 18px); }
+/* cartes pleine largeur, noires, avec un halo sombre tout autour pour le relief */
+.tools {
+  flex: 1; min-height: 0; max-height: 50vh;                 /* un peu moins hautes que l'espace disponible */
+  display: flex; justify-content: flex-start;               /* cartes alignées à gauche, côte à côte */
+  gap: clamp(16px, 2vw, 28px); margin-top: clamp(20px, 4vh, 48px);
+}
+.tools > li { display: grid; flex: none; height: 100%; aspect-ratio: 4 / 5; min-height: 0; }   /* format portrait : plus hautes que larges */
+.tool {
+  display: flex; flex-direction: column; justify-content: space-between; min-height: 0; padding: clamp(22px, 2vw, 30px);
+  border-radius: 26px; color: #fff;
+  background: linear-gradient(170deg, #1f1f1f 0%, #0e0e0e 45%, #050505 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),             /* fine lumière sur le bord haut */
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    0 24px 48px -12px rgba(0, 0, 0, 0.55),               /* ombre portée vers le bas */
+    0 0 60px rgba(0, 0, 0, 0.28);                        /* halo sombre autour */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.tool:hover {
+  transform: translateY(-6px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0, 0, 0, 0.3), 0 40px 64px -16px rgba(0, 0, 0, 0.6), 0 0 80px rgba(0, 0, 0, 0.34);
+}
+/* carte illustrée : l'image (format 4:5) remplit la case, voile sombre en bas pour le texte */
+.tool.has-image {
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.6) 100%), var(--img);
+  background-size: cover; background-position: center;
+}
+.tool svg { width: clamp(40px, 4vw, 56px); height: auto; }
+.tool > span { display: grid; gap: 6px; font-size: clamp(16px, 1.5vw, 22px); line-height: 1.2; letter-spacing: -0.015em; }
+.tool .small { font-size: 12px; color: rgba(255,255,255,0.55); }
+/* variante : nom en capitales à gauche, flèche blanche à droite, grille de points en haut */
+.tool .dots { width: clamp(40px, 4vw, 56px); height: auto; }
+.tool .tool-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.tool .tool-name { font-weight: 500; letter-spacing: -0.01em; }
+.tool .tool-arrow { width: clamp(22px, 2vw, 28px); height: auto; flex: none; transition: transform 0.2s ease; }
+.tool:hover .tool-arrow { transform: translateX(4px); }
+
+/* ── Portail client : fenêtre de connexion ── */
+.login-modal {
+  width: min(440px, calc(100vw - 32px)); margin: auto; padding: 40px 36px 32px;
+  border: 0; border-radius: var(--r-card); background: #fff; color: var(--ink);
+  box-shadow: 0 40px 80px -30px rgba(10, 10, 10, 0.5);
+}
+.login-modal::backdrop { background: rgba(10, 10, 10, 0.45); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.modal-close {
+  position: absolute; top: 14px; right: 14px; width: 34px; height: 34px;
+  border: 0; border-radius: 50%; background: var(--grey); color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer;
+}
+.modal-close:hover { background: var(--grey-2); }
+.modal-title { font-family: var(--display); font-weight: 400; letter-spacing: -0.03em; line-height: 1.08; font-size: clamp(26px, 3vw, 34px); margin-bottom: 26px; }
+.login-form { display: grid; gap: 14px; }
+.login-form .form-foot { margin-top: 8px; }
+.lost { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.lost:hover { color: var(--ink); }
+.login-msg { margin-top: 4px; padding: 12px 14px; border-radius: var(--r); background: var(--grey); color: var(--ink-2); }
+.login-msg a { text-decoration: underline; }
+
+/* ── Apparition au défilement ── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.is-visible { opacity: 1; transform: none; }
+}
+
+/* ── Écrans peu hauts ── */
+@media (max-height: 820px) {
+  .hero-kicker, .hero-title { margin-bottom: 24px; }
+}
+
+/* ── Écrans moyens ── */
+@media (max-width: 1000px) {
+  /* colonne unique : titre puis paragraphe en haut, silhouette centrée en bas */
+  .hero { background-size: auto 50svh; background-position: center bottom; }
+  .hero-body { grid-template-columns: 1fr; grid-template-rows: none; align-items: start; column-gap: 0; row-gap: 14px; padding-bottom: 46svh; }
+  .hero-text { grid-row: auto; padding: 16px 0 0; }
+  .hero-cta { margin-top: 20px; }
+  .hero-card { display: none; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column; gap: 0;
+    position: absolute; left: auto; right: var(--pad); top: calc(100% + 6px); transform: none; z-index: 5; min-width: 200px;
+    background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 6px;
+  }
+  .nav-links.open a { padding: 10px 12px; }
+  .nav-links { height: auto; top: auto; }
+  .nav-links.open > * { height: auto; }
+  .nav-links.open .has-menu { padding: 10px 12px; }
+  .has-menu[aria-expanded="true"]::after { display: none; }
+  .mega { padding: 24px var(--pad) 32px; }
+  .mega-list { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(5, auto); gap: 14px 24px; }
+  .portail { height: auto; min-height: 100vh; min-height: 100svh; }   /* sur petit écran, la page peut défiler */
+  .tools { display: grid; grid-template-columns: 1fr 1fr; max-height: none; }
+  .tools > li { height: auto; }
+  .portail .nav-links { display: flex; position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-50%); }
+  .portail .nav-links > * { height: 100%; }
+  .portail .nav-toggle { display: none; }
+  .nav-toggle { display: flex; }
+  .panel.expo { --card-w: 86vw; --card-gap: -24px; }
+  .panel.about { justify-content: flex-start; background-size: auto 48%; background-position: right -10vw bottom; }
+  .about-text { padding-top: 24px; padding-bottom: 46vh; }
+  .caro-card { aspect-ratio: auto; grid-template-columns: 1fr; gap: 16px; padding: 14px; border-radius: 30px; }
+  .caro-visual { height: clamp(160px, 26vh, 240px); border-radius: 24px; }
+  .caro-visual svg { width: 36%; }
+  .caro-body { padding: 4px 6px 8px; }
+  .caro-btn { top: 26px; transform: none; width: 36px; height: 36px; }
+  .caro-btn:hover { transform: scale(1.06); }
+  .caro-prev { left: calc(7vw + 26px); } .caro-next { right: calc(7vw + 26px); }
+}
+
+/* ── Téléphones ── */
+@media (max-width: 640px) {
+  /* sur téléphone, les sections dépassent parfois l'écran : arrêt souple plutôt qu'obligatoire */
+  html { scroll-snap-type: y proximity; }
+  .panel { padding: 64px var(--pad) 36px; }
+  .hero { --hero-top-h: 56px; padding-top: 0; }
+  .hero-top { gap: 14px; }
+  .nav-right { gap: 14px; }
+  .nav-portal span { display: none; }   /* sur téléphone, l'icône de personne suffit */
+  .tools { grid-template-columns: 1fr; }
+  .tools > li { aspect-ratio: 5 / 4; }
+  .hero-text { padding: 28px 0 16px; }
+  .hero-kicker, .hero-title { margin-bottom: 22px; }
+  .statement-panel { padding-top: 0; padding-bottom: 0; }
+  .caro-body p { font-size: 14px; }
+  .form-foot { flex-direction: column; align-items: flex-start; }
+  .site-foot { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── ERP (erp.lounici.ca) : page de connexion — la photo du héros derrière la fenêtre de connexion ── */
+.erp-login { --hero-top-h: 64px; min-height: 100vh; min-height: 100svh; background: var(--white) url("assets/fond-heros.webp?v=3") no-repeat center var(--hero-top-h) / cover; }
+.erp-login .login-modal::backdrop { background: rgba(10, 10, 10, 0.35); }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="title_tools">Outils | Groupe Lounici</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico?v=3" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png?v=3">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png?v=3">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=23">
+</head>
+<body class="portail">
+
+  <!-- ===== Barre : logo à gauche, Tools au centre, déconnexion à droite ===== -->
+  <div class="portal-wrap">
+    <header class="hero-top">
+      <a class="brand brand-hero" href="#top" aria-label="Groupe Lounici — portail client" data-i18n-attr="aria-label=brand_portal">
+        <img src="assets/logo-blanc.png" alt="Groupe Lounici" class="brand-mark">
+        <span class="brand-name" aria-hidden="true">Groupe Lounici</span>
+      </a>
+      <nav class="nav-links" aria-label="Portail client">
+        <a href="#outils" class="is-active" data-i18n="p_tools">Outils</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang" aria-label="Langue" data-i18n-attr="aria-label=lang_label">
+          <a href="#" hreflang="en" lang="en">EN</a>
+          <span aria-hidden="true">|</span>
+          <a href="#" hreflang="fr" lang="fr" class="is-on" aria-current="true">FR</a>
+        </div>
+        <a class="nav-portal" href="index.html" id="deconnexion">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 8l-4 4 4 4M6 12h12"/></svg>
+          <span data-i18n="p_logout">Déconnexion</span>
+        </a>
+      </div>
+    </header>
+  </div>
+
+  <!-- ===== Outils : titre, sous-titre, cartes noires ===== -->
+  <main class="portal-main" id="top">
+    <section id="outils">
+      <h1 class="h-xl" data-i18n="p_title">Vos outils,<br>au même endroit</h1>
+      <p class="body-m" data-i18n="p_lead">L'arsenal technologique de Groupe Lounici pour mesurer votre performance, l'aligner à votre vision et suivre votre plan d'action.</p>
+
+      <!-- outils provisoires : noms et adresses à remplacer par les vrais -->
+      <ul class="tools">
+        <li>
+          <a class="tool has-image" href="lens.html" style="--img: url('assets/outil-diagnostic.jpg?v=1')">
+            <!-- grille de points blancs (10 × 10), pleins au centre et de plus en plus transparents vers les bords -->
+            <svg class="dots" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true">
+              <defs>
+                <pattern id="grille-points" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1"/></pattern>
+                <radialGradient id="fondu-points" cx="50%" cy="50%" r="50%">
+                  <stop offset="0" stop-color="#fff"/>
+                  <stop offset="0.35" stop-color="#fff"/>
+                  <stop offset="1" stop-color="#fff" stop-opacity="0.1"/>
+                </radialGradient>
+                <mask id="masque-points"><rect width="40" height="40" fill="url(#fondu-points)"/></mask>
+              </defs>
+              <rect width="40" height="40" fill="url(#grille-points)" mask="url(#masque-points)"/>
+            </svg>
+            <span class="tool-foot">
+              <span class="tool-name">Lens</span>
+              <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="tool has-image" href="#" style="--img: url('assets/outil-laureat.jpg?v=1')">
+            <!-- même grille de points : réutilise le motif et le masque définis dans la première carte -->
+            <svg class="dots" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true">
+              <rect width="40" height="40" fill="url(#grille-points)" mask="url(#masque-points)"/>
+            </svg>
+            <span class="tool-foot">
+              <span class="tool-name">Laureat</span>
+              <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="lens-config.js?v=1"></script>
+  <script src="lens-cloud.js?v=1"></script>
+  <script src="script.js?v=19"></script>
+</body>
+</html>

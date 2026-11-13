@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projets | Groupe Lounici</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico?v=3" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="projets.css?v=1">
+  <script src="lens-config.js?v=1"></script>
+  <script src="lens-cloud.js?v=2"></script>
+  <script>
+    // Accès réservé : session Supabase (connexion de l'ERP) ou, en mode local, passage par la page de connexion
+    (function () { var ok = false; try { ok = (window.LensCloud && LensCloud.enabled) ? LensCloud.hasLocalSession() : sessionStorage.getItem("portail") === "1"; } catch (e) {} if (!ok) location.replace("index.html"); })();
+  </script>
+</head>
+<!-- Projets : outil de gestion de projet de l'ERP Groupe Lounici (projets, tâches, tableau, liste, échéancier) -->
+<body>
+
+<div class="app" id="app">
+  <!-- ===== Barre latérale : marque, entreprise, navigation, liste des projets ===== -->
+  <aside class="side" id="side">
+    <div class="side-top">
+      <a class="brand" href="portail.html" title="Retour au portail">
+        <img src="assets/logo-blanc.png" alt="Groupe Lounici">
+        <span>Projets</span>
+      </a>
+      <button class="icon-btn side-close" id="side-close" type="button" aria-label="Fermer le menu">×</button>
+    </div>
+
+    <label class="side-field" id="ent-wrap" hidden>
+      <span>Entreprise</span>
+      <select id="ent"></select>
+    </label>
+
+    <nav class="side-nav" aria-label="Vues">
+      <a href="#apercu" data-nav="apercu"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Vue d’ensemble</a>
+      <a href="#mes-taches" data-nav="mes-taches"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l2 2 4-4M4 17l2 2 4-4M14 7h6M14 17h6"/></svg>Mes tâches <b class="count" id="mine-count" hidden></b></a>
+    </nav>
+
+    <div class="side-head">
+      <span>Projets</span>
+      <button class="icon-btn" id="new-proj" type="button" aria-label="Nouveau projet" title="Nouveau projet">+</button>
+    </div>
+    <ul class="proj-list" id="proj-list"></ul>
+
+    <div class="side-foot">
+      <span id="who"></span>
+      <a href="portail.html">← Portail</a>
+    </div>
+  </aside>
+  <div class="side-scrim" id="side-scrim"></div>
+
+  <!-- ===== Contenu ===== -->
+  <main class="main" id="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="search" type="search" placeholder="Rechercher une tâche…" autocomplete="off"></div>
+      <span class="sync" id="sync" title="Enregistrement"></span>
+    </header>
+
+    <div class="view" id="view"></div>
+  </main>
+</div>
+
+<!-- Fiche d'une tâche (panneau latéral) -->
+<dialog class="drawer" id="task-dlg" aria-label="Tâche"></dialog>
+<!-- Projet : création / modification -->
+<dialog class="modal" id="proj-dlg" aria-label="Projet"></dialog>
+<!-- Confirmation -->
+<dialog class="modal small" id="confirm-dlg" aria-label="Confirmation"></dialog>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<datalist id="people"></datalist>
+
+<script src="projets.js?v=1"></script>
+</body>
+</html>

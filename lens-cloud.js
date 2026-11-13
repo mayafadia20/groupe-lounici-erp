@@ -17,6 +17,8 @@
 
   window.LensCloud = {
     enabled, ref,
+    /** Client Supabase partagé (session commune à Lens et aux autres outils de l'ERP, dont Projets). */
+    client: () => sb(),
     /** Vrai si une session Supabase est présente dans ce navigateur (test rapide, sans réseau). */
     hasLocalSession() { try { return enabled && !!localStorage.getItem("sb-" + ref + "-auth-token"); } catch (_) { return false; } },
 

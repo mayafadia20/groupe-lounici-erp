@@ -1,6 +1,6 @@
 # Module « Dépenses & abonnements » — spécification
 
-Module à intégrer à l'ERP de Maya. Il lit les relevés de cartes de crédit, classe chaque achat, repère les abonnements récurrents et affiche ce qu'ils coûtent par mois. Le prototype existe déjà (tableau de bord claude.ai). Ce document décrit ce qu'il faut reproduire dans l'ERP.
+Module à intégrer à l'ERP de Groupe Lounici (`groupe-lounici-erp`). Il lit les relevés de cartes de crédit, classe chaque achat, repère les abonnements récurrents et affiche ce qu'ils coûtent par mois. Le prototype existe déjà (tableau de bord claude.ai). Ce document décrit ce qu'il faut reproduire dans l'ERP.
 
 Montants en dollars canadiens (CAD), taxes comprises, sauf mention contraire.
 
@@ -146,15 +146,65 @@ Appliquer les règles dans l'ordre (§2). Les transactions non reconnues vont da
 
 ---
 
-## 4. Écran
+## 4. Écran et mise en page
 
-1. **En-tête** : une phrase avec le total mensuel des abonnements actifs, la part Logiciels & IA, le coût de Claude, et la dépense moyenne par mois des 12 derniers mois.
-2. **5 tuiles** : Logiciels & IA, Apple, Streaming & médias, Autres abonnements, Factures fixes (montant par mois).
-3. **Tableau des abonnements** : Service, Groupe, Carte, Par mois, Statut (pastille verte = actif, orange = à vérifier, grise = ponctuel/arrêté), Dernier débit, 12 derniers mois, Total payé, Note. Tri par groupe, puis statut, puis montant. Bouton « Ajouter un abonnement » (formulaire : service, groupe, carte, prix, devise, taxes, fréquence, date de début, note).
-4. **Graphique** : barres empilées par mois des 4 groupes d'abonnements numériques, avec infobulle.
-5. **Graphique** : barres horizontales, moyenne mensuelle par catégorie (12 derniers mois).
-6. **Transactions** : recherche, filtre par catégorie, tri date / montant, compteur « N transactions · total », correction de catégorie en ligne.
-7. **Import** : glisser-déposer de PDF (ou d'un zip), résumé après import (relevés lus, transactions ajoutées, doublons ignorés, relevés qui ne balancent pas).
+**Le module doit ressembler exactement au CRM et à Projets.** Même système visuel : monochrome, barre latérale noire, contenu gris clair, cartes blanches arrondies, polices Inter et Inter Tight. Ne créer **aucune nouvelle couleur ni police** : tout passe par les variables de `projets.css`.
+
+### 4.1 Fichiers et gabarit
+- `depenses.html` copie le gabarit de `crm.html` : même `<head>` (favicons, Google Fonts Inter + Inter Tight, `projets.css` puis `depenses.css`, `lens-config.js`, `lens-cloud.js`, le script de garde qui renvoie à `index.html` sans session), `<meta name="robots" content="noindex">`, titre `Dépenses | Groupe Lounici`.
+- Structure identique : `.app` > `aside.side` (logo blanc `assets/logo-blanc.png` + libellé « Dépenses », `nav.side-nav`, `.side-foot` avec `#who` et « ← Portail ») + `.side-scrim` + `main.main` > `header.topbar` (bouton `.menu-btn`, champ `.search`, `.sync`, bouton `.btn.black`) + `.view`.
+- `depenses.css` ne contient **que des compléments**, comme `crm.css` (« compléments à projets.css »). Réutiliser avant d'inventer.
+- `depenses.js` suit `crm.js` : routage par `#ancre`, rendu dans `#view`, `dialog.modal` pour les formulaires, `.toasts` pour les confirmations, menu mobile identique.
+
+### 4.2 Barre latérale (`.side-nav`, icônes SVG au trait 1.6 comme le CRM)
+- Tableau de bord (`#apercu`)
+- Abonnements (`#abonnements`), avec un `.count` = nombre d'abonnements « À vérifier »
+- Transactions (`#transactions`)
+- Catégories (`#categories`)
+- Importer (`#importer`)
+- Sous `.side-head` « Cartes » : la liste des cartes dans `.proj-list` (pastille `.dot`, nom, dépense du mois en `.pc`). Cliquer filtre toutes les vues sur cette carte.
+
+### 4.3 Vues, composant par composant
+| Élément | Composant existant à réutiliser |
+|---|---|
+| Titre de chaque vue | `.page-head` > `h1.title` + `p.sub` ; boutons dans `.actions` |
+| Phrase de synthèse (total actif, part Logiciels & IA, Claude, moyenne 12 mois) | `p.sub` sous le titre, montants en `<b>` |
+| 5 tuiles (Logiciels & IA, Apple, Streaming, Autres, Factures fixes) | `.kpis` / `.kpi` (`b` = montant, `span` = libellé). Première tuile `.kpi.dark`. Passer la grille à 5 colonnes dans `depenses.css` (2 colonnes sous 1100 px comme l'existant) |
+| Tableau des abonnements | `.table-wrap` > `table.tasks`, en-têtes triables (`th.on`, `th.on.asc`), lignes de groupe `.group-row`, montants en `.money` |
+| Statut d'un abonnement | `.pill` : **Actif** = style de `.pill.s-termine` (vert), **À vérifier** = fond `rgba(201,138,20,.12)` + `color: var(--amber)`, **Ponctuel / Arrêté** = style de `.pill.s-en_pause` (pointillé) |
+| Dernier débit en retard (abonnement attendu non débité) | `.due.late` (rouge) ; bientôt dû = `.due.soon` |
+| Filtres (carte, groupe, catégorie, période) | `.filters select` et `.chips` ; bascule de vue avec `.tabs` |
+| Recherche | le champ `.search` de la `topbar` (comme le CRM) |
+| Cartes de graphique | `.card` + `h2` avec `small` à droite pour la période ; disposition `.grid-2` |
+| Liste courte (prochains débits, top marchands) | `.dl` |
+| Ajouter un abonnement / corriger une catégorie | `dialog.modal` (`.modal.wide` pour le formulaire), champs et boutons `.btn`, `.btn.black`, `.btn.ghost` |
+| Saisie devise / fréquence | `.seg` (boutons segmentés) |
+| Confirmation après import ou enregistrement | `.toast` ; erreur = `.toast.err` |
+| Vide (aucune transaction) | `.empty-state` avec un `.btn.black` « Importer des relevés » |
+| Barres de proportion (part d'une catégorie) | `.bar > i` avec `--p` |
+
+### 4.4 Graphiques
+Aucune librairie de graphiques n'est utilisée dans l'ERP : dessiner en **SVG fait main** dans `depenses.js`, sans dépendance.
+- Monochrome, dans les tons de `projets.css` : série principale `var(--black)`, puis `var(--ink-2)` (#45454a), `var(--muted)` (#8a8a90), `#c9c9ce`. Pas d'autres couleurs ; le rouge `--red` seulement pour un dépassement ou une alerte.
+- Barres empilées par mois (4 groupes d'abonnements) : barres aux coins arrondis 3 px, quadrillage `var(--line)`, libellés d'axe 12 px `var(--muted)`, chiffres en `font-variant-numeric: tabular-nums`.
+- Moyenne par catégorie : barres horizontales en `var(--black)` pour les 4 groupes d'abonnements, `#c9c9ce` pour le reste.
+- Infobulle : petite carte blanche, `border-radius: var(--r)`, bordure `var(--line-2)`, ombre de `.modal` atténuée.
+- Légende : pastilles 8 px rondes comme `.proj-list .dot`.
+
+### 4.5 Portail et mobile
+- Carte « Dépenses » dans `portail.html`, même balisage que la carte CRM (`li data-role="lounici"` > `a.tool` avec la grille de points `.dots`, `.tool-foot`, `.tool-name`, `.tool-arrow`). Comme les données sont personnelles, masquer aussi la carte pour tout compte autre que celui de Maya (voir la RLS, section 0).
+- Reprendre les règles `@media (max-width: 860px)` du CRM : barre latérale en tiroir, libellé du bouton principal masqué, tableaux qui défilent horizontalement dans `.table-wrap`.
+
+### 4.6 Format des nombres et des dates
+- Montants : `Intl.NumberFormat('fr-CA', {style: 'currency', currency: 'CAD'})` → « 1 105,50 $ ». Devise étrangère affichée à côté : « 28,74 $ US ».
+- Dates : « 13 nov. 2026 » (`fr-CA`), mois en abrégé dans les graphiques (« nov. 26 »).
+
+### 4.7 Contenu des vues
+1. **Tableau de bord** : phrase de synthèse, 5 tuiles, graphique des abonnements par mois, liste `.dl` des prochains débits attendus (30 jours), abonnements « À vérifier ».
+2. **Abonnements** : tableau complet, groupé par groupe, bouton « Ajouter un abonnement ».
+3. **Transactions** : recherche, filtres, tri date / montant, compteur « N transactions · total », correction de catégorie en un clic (modal).
+4. **Catégories** : moyenne mensuelle par catégorie (12 derniers mois) et évolution d'une catégorie choisie.
+5. **Importer** : glisser-déposer de PDF ou de CSV ; résumé après import (relevés lus, transactions ajoutées, doublons ignorés, relevés qui ne balancent pas).
 
 ---
 

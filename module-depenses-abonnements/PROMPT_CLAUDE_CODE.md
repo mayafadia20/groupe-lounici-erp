@@ -9,6 +9,7 @@ Ajoute à l'ERP un module « Dépenses & abonnements ». Toute la spécification
 Contexte :
 - Le site est publié tel quel sur erp.lounici.ca (GitHub Pages) : aucune donnée financière ne doit être commitée. Les données vont dans Supabase, avec une RLS qui ne laisse voir les dépenses qu'à moi (pas à tout le rôle `lounici`).
 - Suis le modèle du CRM : `crm.html`, `crm.js`, `crm.css`, `supabase/crm.sql`, la carte dans `portail.html` et la section du `README.md`.
+- **La mise en page et les couleurs doivent être celles de l'ERP** (section 4 de la spec) : même gabarit que `crm.html`, `projets.css` chargé en premier, `depenses.css` limité à des compléments, aucune nouvelle couleur ni police, composants existants réutilisés (`.kpis`, `.card`, `table.tasks`, `.pill`, `.modal`, `.toast`…), graphiques en SVG monochrome sans librairie.
 - `module-depenses-abonnements/scripts/` contient le prototype Python qui marche déjà : `01_parse_releves.py` (lecture des PDF RBC et Desjardins après `pdftotext -layout`), `02_categoriser.py` (règles de catégorisation, dans l'ordre), `03_abonnements.py` (abonnements, statuts, totaux). Reprends leur logique et leurs expressions régulières.
 
 Ce que j'attends :

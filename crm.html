@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM | Groupe Lounici</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico?v=3" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- même système visuel que Projets, plus les éléments propres au CRM -->
+  <link rel="stylesheet" href="projets.css?v=1">
+  <link rel="stylesheet" href="crm.css?v=1">
+  <script src="lens-config.js?v=1"></script>
+  <script src="lens-cloud.js?v=2"></script>
+  <script>
+    // Accès réservé : session Supabase (connexion de l'ERP) ou, en mode local, passage par la page de connexion
+    (function () { var ok = false; try { ok = (window.LensCloud && LensCloud.enabled) ? LensCloud.hasLocalSession() : sessionStorage.getItem("portail") === "1"; } catch (e) {} if (!ok) location.replace("index.html"); })();
+  </script>
+</head>
+<!-- CRM : suivi des clients et prospects contactés par Groupe Lounici (comptes, contacts, journal des échanges, relances, pipeline) -->
+<body>
+
+<div class="app" id="app">
+  <aside class="side" id="side">
+    <div class="side-top">
+      <a class="brand" href="portail.html" title="Retour au portail">
+        <img src="assets/logo-blanc.png" alt="Groupe Lounici">
+        <span>CRM</span>
+      </a>
+      <button class="icon-btn side-close" id="side-close" type="button" aria-label="Fermer le menu">×</button>
+    </div>
+
+    <nav class="side-nav" aria-label="Vues">
+      <a href="#apercu" data-nav="apercu"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Tableau de bord</a>
+      <a href="#relances" data-nav="relances"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"/></svg>Relances <b class="count" id="due-count" hidden></b></a>
+      <a href="#pipeline" data-nav="pipeline"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="4.5" height="16" rx="1.2"/><rect x="9.75" y="4" width="4.5" height="11" rx="1.2"/><rect x="16" y="4" width="4.5" height="7" rx="1.2"/></svg>Pipeline</a>
+      <a href="#clients" data-nav="clients"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v14M15 10h3a2 2 0 0 1 2 2v8M3 20h18M8 8h3M8 12h3M8 16h3"/></svg>Clients</a>
+      <a href="#journal" data-nav="journal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="8.5"/></svg>Journal des échanges</a>
+    </nav>
+
+    <div class="side-head"><span>Récemment contactés</span></div>
+    <ul class="proj-list" id="recent"></ul>
+
+    <div class="side-foot">
+      <span id="who"></span>
+      <a href="portail.html">← Portail</a>
+    </div>
+  </aside>
+  <div class="side-scrim" id="side-scrim"></div>
+
+  <main class="main" id="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="search" type="search" placeholder="Rechercher un client, un contact, un échange…" autocomplete="off"></div>
+      <span class="sync" id="sync"></span>
+      <button class="btn black" id="log-btn" type="button"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="lbl">Logger un contact</span></button>
+    </header>
+    <div class="view" id="view"></div>
+  </main>
+</div>
+
+<dialog class="modal" id="log-dlg" aria-label="Logger un contact"></dialog>
+<dialog class="modal" id="acc-dlg" aria-label="Client"></dialog>
+<dialog class="modal" id="ct-dlg" aria-label="Contact"></dialog>
+<dialog class="modal small" id="confirm-dlg" aria-label="Confirmation"></dialog>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<datalist id="accounts"></datalist>
+<datalist id="sources"><option value="Recommandation"><option value="LinkedIn"><option value="Événement"><option value="Site web"><option value="Réseau personnel"><option value="Appel à froid"></datalist>
+<datalist id="sectors"></datalist>
+
+<script src="crm.js?v=1"></script>
+</body>
+</html>

@@ -296,7 +296,8 @@ h3 { font-size: clamp(18px, 1.6vw, 24px); }
   display: flex; justify-content: flex-start;               /* cartes alignées à gauche, côte à côte */
   gap: clamp(16px, 2vw, 28px); margin-top: clamp(20px, 4vh, 48px);
 }
-.tools > li { display: grid; flex: none; height: 100%; aspect-ratio: 4 / 5; min-height: 0; }   /* format portrait : plus hautes que larges */
+.tools > li { display: grid; flex: 0 1 auto; height: 100%; aspect-ratio: 4 / 5; min-height: 0; min-width: 0; }   /* format portrait : plus hautes que larges */
+.tools:has(> li:nth-child(4)) > li { flex: 1 1 0; height: auto; max-height: 100%; align-self: flex-start; }   /* 4 outils ou plus : les cartes se partagent la largeur */
 .tool {
   display: flex; flex-direction: column; justify-content: space-between; min-height: 0; padding: clamp(22px, 2vw, 30px);
   border-radius: 26px; color: #fff;

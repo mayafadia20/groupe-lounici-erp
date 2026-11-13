@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=23">
+  <link rel="stylesheet" href="styles.css?v=24">
 </head>
 <body class="portail">
 
@@ -82,6 +82,18 @@
             </span>
           </a>
         </li>
+        <!-- CRM : réservé à Groupe Lounici (carte retirée pour les comptes clients, voir script.js) -->
+        <li data-role="lounici">
+          <a class="tool" href="crm.html">
+            <svg class="dots" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true">
+              <rect width="40" height="40" fill="url(#grille-points)" mask="url(#masque-points)"/>
+            </svg>
+            <span class="tool-foot">
+              <span class="tool-name">CRM</span>
+              <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </li>
         <li>
           <a class="tool has-image" href="#" style="--img: url('assets/outil-laureat.jpg?v=1')">
             <!-- même grille de points : réutilise le motif et le masque définis dans la première carte -->
@@ -100,6 +112,6 @@
 
   <script src="lens-config.js?v=1"></script>
   <script src="lens-cloud.js?v=2"></script>
-  <script src="script.js?v=19"></script>
+  <script src="script.js?v=20"></script>
 </body>
 </html>

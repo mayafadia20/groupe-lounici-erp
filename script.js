@@ -234,6 +234,8 @@
     try { ouvert = sessionStorage.getItem("portail") === "1"; } catch (_) {}
     if (!ouvert && window.LensCloud && LensCloud.hasLocalSession()) { ouvert = true; try { sessionStorage.setItem("portail", "1"); } catch (_) {} }
     if (!ouvert) { window.location.replace("index.html"); return; }
+    // outils réservés à Groupe Lounici (ex. CRM) : retirés pour les comptes clients
+    if (window.LensCloud && LensCloud.enabled) LensCloud.me().then((m) => { if (!m || m.role !== "lounici") document.querySelectorAll('[data-role="lounici"]').forEach((el) => el.remove()); }).catch(() => {});
     const sortie = document.getElementById("deconnexion");
     if (sortie) sortie.addEventListener("click", () => { try { sessionStorage.removeItem("portail"); } catch (_) {} if (window.LensCloud && LensCloud.enabled) LensCloud.signOut(); });
   }

@@ -13,7 +13,7 @@ Contexte :
 - `module-depenses-abonnements/scripts/` contient le prototype Python qui marche déjà : `01_parse_releves.py` (lecture des PDF RBC et Desjardins après `pdftotext -layout`), `02_categoriser.py` (règles de catégorisation, dans l'ordre), `03_abonnements.py` (abonnements, statuts, totaux). Reprends leur logique et leurs expressions régulières.
 
 Ce que j'attends :
-1. Propose-moi d'abord un plan court : tables Supabase et RLS, fichiers à créer, façon d'importer les relevés (PDF lus dans le navigateur ou CSV produit par les scripts), librairie de graphiques.
+1. Propose-moi d'abord un plan court : tables Supabase et RLS, fichiers à créer, façon d'importer les relevés (PDF lus dans le navigateur ou CSV produit par les scripts), et les composants de `projets.css` que tu réutilises pour chaque vue.
 2. Crée `supabase/depenses.sql` (réexécutable), `depenses.html`, `depenses.js`, `depenses.css`, la carte du portail et la section du README.
 3. Ajoute un bouton « Importer un CSV » pour que je charge moi-même mes données de départ (`transactions.csv`, `abonnements.csv`, `abonnements_manuels.csv`).
 4. Vérifie avec mes données les valeurs de contrôle de la section 6 de la spec (totaux des abonnements, moyenne mensuelle).

@@ -3,3 +3,11 @@ Thumbs.db
 node_modules/
 .vscode/
 *.log
+
+# Données financières personnelles : jamais dans ce dépôt (publié sur erp.lounici.ca)
+module-depenses-abonnements/data/
+*.pdf
+transactions*.csv
+abonnements*.csv
+mensuel_categories*.csv
+__pycache__/
